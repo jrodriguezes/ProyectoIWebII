@@ -1,11 +1,11 @@
 <?php
 // FRONT CONTROLLER
 
-define('ROOT', dirname(__DIR__));                 // /.../PROYECTO01-WEBII
-define('VIEW_PATH', ROOT . '/src/views');         // /src/views
-define('LAYOUT_PATH', VIEW_PATH . '/layouts');    // /src/views/layouts
-define('COMP_PATH', VIEW_PATH . '/components');   // /src/views/components
-define('BASE_URL', '/');                          // Ajusta si tu proyecto vive en subcarpeta
+define('ROOT', dirname(__DIR__));              
+define('VIEW_PATH', ROOT . '/src/views');        
+define('LAYOUT_PATH', VIEW_PATH . '/layouts');   
+define('COMP_PATH', VIEW_PATH . '/components');  
+define('BASE_URL', '/');                       
 
 function render(string $view, array $data = [])
 {
