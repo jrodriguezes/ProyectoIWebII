@@ -3,6 +3,10 @@ document.addEventListener("DOMContentLoaded", function () {
   const hiddenInput = document.getElementById("userType");
   const userTypeLabel = document.getElementById("userTypeLabel");
 
+  if (!toggleSwitch || !hiddenInput || !userTypeLabel) {
+    return; 
+  }
+
   toggleSwitch.addEventListener("change", function () {
     if (toggleSwitch.checked) {
       hiddenInput.value = "Driver";
