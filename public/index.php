@@ -23,15 +23,15 @@ $uri = trim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/');
 switch ($uri) {
   case '':
   case 'home':
-    render('user-register'); 
+    render('home'); 
     break;
 
   case 'user-register':
     render('user-register');
     break;
 
-  case 'driver-register':
-    render('driver-register');
+  case 'login':
+    render('login');
     break;
 
   default:
