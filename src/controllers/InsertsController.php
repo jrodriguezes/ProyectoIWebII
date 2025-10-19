@@ -40,14 +40,14 @@ if (!empty($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
     $photo_rel = '/uploads/' . $name;
 }
 
-$result = insertData($id, $first_name, $lastname, $birth_date, $email, $phone_number, $photo_rel, $password, $user_type, $stateId);
+$result = insertData($id, $first_name, $last_name, $birth_date, $email, $phone_number, $photo_rel, $password, $user_type, $stateId);
 
 if ($result !== true) {
     echo "Error: $result";
     exit();
 }
 
-header("Location: login.php");
+header("Location: /login");
 exit();
 
 ?>
