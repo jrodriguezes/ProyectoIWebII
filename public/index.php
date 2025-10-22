@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/../vendor/autoload.php';
+require_once __DIR__ . '/../src/config/session.php';
 
 // FRONT CONTROLLER
 // 👈 BASE_URL dinámica (http/https + host:puerto + subcarpeta)
@@ -46,6 +47,10 @@ switch ($uri) {
 
   case 'check-your-email':
     render('check-your-email');
+    break;
+
+  case 'logout':
+    require_once __DIR__ . '/../src/controllers/LogoutController.php';
     break;
 
   default:
