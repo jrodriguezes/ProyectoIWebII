@@ -1,7 +1,6 @@
 <div class="justify-center ">
     <div class="flex items-center">
         <div><?php include COMP_PATH . '/theme-toggle.php'; ?></div>
-        <div class="h-8"><?php include COMP_PATH . '/toggle.php'; ?></div>
     </div>
     <div class="justify-center flex p-8">
         <h1 class="font-bold text-2xl leading-[1.32]">
