@@ -5,5 +5,5 @@
     <label id="userTypeLabel" class="inline-block ps-[0.15rem] hover:cursor-pointer"
         for="userTypeSwitch">Passenger</label>
 
-    <input type="hidden" name="user_type" id="user-type" value="user">
+    <input type="hidden" name="user_type" id="user-type" value="Passenger">
 </div>
