@@ -19,16 +19,18 @@
     </script>
 </head>
 
-<body class="min-h-dvh flex flex-col bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
-    <main class="flex-1"> 
-            <?= $content ?>
-    </main>
+<body class="min-h-screen flex flex-col bg-gray-50 dark:bg-gray-900 text-gray-100 overflow-x-hidden">
+  <main class="flex-1 flex items-center justify-center">
+    <?= $content ?>
+  </main>
 
-    <footer class="mt-auto">
-        <?php include LAYOUT_PATH . '/nav.php'; ?>
-    </footer>
+  <footer class="mt-auto">
+    <?php include LAYOUT_PATH . '/nav.php'; ?>
+  </footer>
+
     <script src="<?= rtrim(BASE_URL, '/') ?>/assets/js/theme-toggle.js"></script>
     <script src="<?= rtrim(BASE_URL, '/') ?>/assets/js/toggle-user-type.js"></script>
 </body>
 
 </html>
+
