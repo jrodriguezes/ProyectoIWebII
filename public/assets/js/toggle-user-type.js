@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
   const toggleSwitch = document.getElementById("userTypeSwitch");
-  const hiddenInput = document.getElementById("userType");
+  const hiddenInput = document.getElementById("user-type");
   const userTypeLabel = document.getElementById("userTypeLabel");
 
   if (!toggleSwitch || !hiddenInput || !userTypeLabel) {
