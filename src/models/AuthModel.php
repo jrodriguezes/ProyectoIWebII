@@ -4,7 +4,7 @@ function findUserByEmail(string $email)
 {
     $conn = getConnection();
 
-    $sql = "SELECT FROM TABLE USERS WHERE EMAIL = '$email'";
+    $sql = "SELECT * FROM USERS WHERE EMAIL = '$email'";
 
     $result = $conn->query($sql);
 
