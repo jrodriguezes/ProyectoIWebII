@@ -2,6 +2,10 @@
 require_once __DIR__ . "/../models/InsertFunctions.php";
 require_once __DIR__ . "/../config/mailer.php";
 
+require_once __DIR__ . "/../services/UploadService.php";
+require_once __DIR__ . "/../services/VerificationService.php";
+require_once __DIR__ . "/../services/EmailService.php";
+
 use PHPMailer\PHPMailer\PHPMailer;
 
 $id = $_POST["floating_id"];
@@ -25,28 +29,11 @@ if ($password_raw !== $password_raw_2) {
 
 $password = password_hash($password_raw, PASSWORD_BCRYPT);
 
-$photo_rel = null;
-if (!empty($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
-    $uploadsDir = __DIR__ . '/../../public/uploads';
-    if (!is_dir($uploadsDir))
-        mkdir($uploadsDir, 0777, true);
+// 1) Subir foto
+$photo_rel = handleProfileUpload($_FILES['photo'] ?? null);
 
-    $ext = strtolower(pathinfo($_FILES['photo']['name'], PATHINFO_EXTENSION));
-    $name = 'user_' . time() . '_' . bin2hex(random_bytes(4)) . '.' . $ext;
-    $dest = $uploadsDir . '/' . $name;
-
-    if (!move_uploaded_file($_FILES['photo']['tmp_name'], $dest)) {
-        exit('Error saving uploaded file');
-    }
-
-    $photo_rel = '/uploads/' . $name;
-}
-
-// --- Token para verificacion ---
-$token = bin2hex(random_bytes(32));  // token de 64 caracteres
-$verify_hash = hash('sha256', $token);
-$verify_expires = date('Y-m-d H:i:s', strtotime('+24 hours'));
-
+// 2) Token de verificación
+[$token, $verify_hash, $verify_expires] = generateVerification();
 
 $result = insertData(
     $id,
@@ -68,27 +55,16 @@ if ($result !== true) {
     exit();
 }
 
-// --- Enviar correo de verificación ---
+// 4) URL y envío de email (servicio)
 $verifyUrl = "http://proyecto01webii.net:8080/verify-email?uid={$id}&token={$token}";
-
 try {
-    $mail = make_mailer();
-    $mail->addAddress($email, "$first_name $last_name");
-    $mail->Subject = "Verifica tu cuenta";
-    $mail->isHTML(true);
-    $mail->Body = "
-        <p>Hola {$first_name},</p>
-        <p>Gracias por registrarte. Verifica tu correo haciendo clic aquí:</p>
-        <p><a href='{$verifyUrl}'>Verificar cuenta</a></p>
-        <p>Este enlace expira en 24 horas.</p>
-    ";
-    $mail->AltBody = "Abre este enlace para verificar tu cuenta: {$verifyUrl}";
-    $mail->send();
+    sendVerificationEmail($email, "$first_name $last_name", $verifyUrl);
 } catch (Throwable $e) {
     error_log('Mailer error: ' . $e->getMessage());
 }
 
-header("Location: /login");
+
+header("Location: /check-your-email");
 exit();
 
 
