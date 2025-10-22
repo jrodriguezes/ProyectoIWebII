@@ -9,9 +9,9 @@ function make_mailer(): PHPMailer
 {
     $m = new PHPMailer(true);
 
-    $m->isSMTP();                         // usa SMTP
-    $m->Host = 'smtp.gmail.com';    // servidor de Gmail
-    $m->SMTPAuth = true;                // requiere autenticación
+    $m->isSMTP();
+    $m->Host = 'smtp.gmail.com';//servidor de Gmail
+    $m->SMTPAuth = true;//requiere autenticacion
     $m->Username = 'noreplyaventones@gmail.com';
     $m->Password = 'kdmuijgkjtrdwupq';
     $m->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;   // TLS
