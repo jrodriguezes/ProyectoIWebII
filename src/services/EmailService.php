@@ -13,6 +13,6 @@ function sendVerificationEmail(string $toEmail, string $toName, string $verifyUr
         <p>Este enlace expira en 24 horas.</p>
     ";
     $mail->AltBody = "Abre este enlace para verificar tu cuenta: {$verifyUrl}";
-    return $mail->send(); // devuelve true/false
+    return $mail->send(); //devuelve true/false
 }
 ?>
