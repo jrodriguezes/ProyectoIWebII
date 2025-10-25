@@ -24,7 +24,7 @@
   require_once __DIR__ . '/../../config/session.php';
   $user = $_SESSION['user'] ?? null;
   ?>
-  <main class="flex-1 flex items-center justify-center">
+  <main class="flex-1">
     <?= $content ?>
   </main>
 
@@ -34,6 +34,7 @@
 
   <script src="<?= rtrim(BASE_URL, '/') ?>/assets/js/theme-toggle.js"></script>
   <script src="<?= rtrim(BASE_URL, '/') ?>/assets/js/toggle-user-type.js"></script>
+  <script src="<?= rtrim(BASE_URL, '/') ?>/assets/js/flowbite.min.js"></script>
 </body>
 
 </html>
