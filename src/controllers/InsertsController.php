@@ -5,67 +5,22 @@ require_once __DIR__ . "/../config/mailer.php";
 require_once __DIR__ . "/../services/UploadService.php";
 require_once __DIR__ . "/../services/VerificationService.php";
 require_once __DIR__ . "/../services/EmailService.php";
+$action = $_POST["action"] ?? null;
 
-use PHPMailer\PHPMailer\PHPMailer;
+switch ($action) {
+    case "register_user":
+        include __DIR__ . "/actions/insertUser.php";
+        break;
 
-$id = $_POST["floating_id"];
-$first_name = $_POST["floating_first_name"];
-$last_name = $_POST["floating_last_name"];
-$birth_date = $_POST["date"];
-$email = $_POST["floating_email"];
-$phone_number = $_POST["floating_phone"];
-$profile_photo = $_FILES["photo"];
-$password_raw = $_POST["floating_password"];
-$password_raw_2 = $_POST["floating_repeat_password"];
-$user_type = $_POST["user_type"];
-$stateId = "pending";
+    case "register_ride":
+        include __DIR__ . "/actions/insertRide.php";
+        break;
 
-if (!$id || !$first_name || !$last_name || !$birth_date || !$email || !$phone_number || !$user_type || !$password_raw || !$password_raw_2) {
-    exit('Missing required fields');
+    case "register_vehicle":
+        include __DIR__ . "/actions/insertVehicle.php";
+        break;
+
+    default:
+        http_response_code(400);
+        exit("Unknown insert action");
 }
-if ($password_raw !== $password_raw_2) {
-    exit('Passwords do not match');
-}
-
-$password = password_hash($password_raw, PASSWORD_BCRYPT);
-
-// 1) Subir foto
-$photo_rel = handleProfileUpload($_FILES['photo'] ?? null);
-
-// 2) Token de verificación
-[$token, $verify_hash, $verify_expires] = generateVerification();
-
-$result = insertData(
-    $id,
-    $first_name,
-    $last_name,
-    $birth_date,
-    $email,
-    $phone_number,
-    $photo_rel,
-    $password,
-    $user_type,
-    $stateId,
-    $verify_hash,
-    $verify_expires
-);
-
-if ($result !== true) {
-    echo "Error: $result";
-    exit();
-}
-
-// 4) URL y envío de email (servicio)
-$verifyUrl = "http://proyecto01webii.net:8080/verify-email?uid={$id}&token={$token}";
-try {
-    sendVerificationEmail($email, "$first_name $last_name", verifyUrl: $verifyUrl);
-} catch (Throwable $e) {
-    error_log('Mailer error: ' . $e->getMessage());
-}
-
-
-header("Location: /check-your-email");
-exit();
-
-
-?>
