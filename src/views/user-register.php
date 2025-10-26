@@ -1,6 +1,7 @@
 <div class="form-container bg-white dark:bg-gray-800 shadow-lg rounded-xl p-8 w-full max-w-2xl">
-    <form action="/post/register.php" method="POST" class="max-w-xl mx-auto" id="registerForm"
+    <form action="/post/insert.php" method="POST" class="max-w-xl mx-auto" id="registerForm"
         enctype="multipart/form-data">
+        <input type="hidden" name="action" value="register_user">
         <div class="flex items-center">
             <div><?php include COMP_PATH . '/theme-toggle.php'; ?></div>
             <div class="h-8"><?php include COMP_PATH . '/toggle.php'; ?></div>
