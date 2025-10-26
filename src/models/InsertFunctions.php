@@ -16,4 +16,35 @@ function insertData($id, $first_name, $last_name, $birth_date, $email, $phone_nu
 
     $conn->close();
 }
+
+function insertVehicle($plate_id, $color, $brand, $model, $year, $seats, $vehicle_picture, $driver_id)
+{
+    $conn = getConnection();
+
+    $sql = "INSERT INTO vehicles (plate_id, driver_id, color, brand, model, year, seats, vehicle_picture)
+            VALUES ('$plate_id', '$driver_id', '$color', '$brand', '$model', '$year', '$seats', '$vehicle_picture')";
+
+    if ($conn->query($sql) === TRUE) {
+        return true;
+    } else {
+        return 'Error: ' . $conn->error;
+    }
+
+    $conn->close();
+}
+
+function insertRide($ride_id, $created_by_user, $name, $departure_place, $arrival_place, $date_time, $price_per_seat, $seats)
+{
+    $conn = getConnection();
+
+    $sql = "INSERT INTO rides (ride_id, created_by_user, name, departure_place, arrival_place, date_time, price_per_seat, seats)
+            VALUES ('$ride_id', '$created_by_user', '$name', '$departure_place', '$arrival_place', '$date_time', '$price_per_seat', '$seats')";
+
+    if ($conn->query($sql) === TRUE) {
+        return true;
+    } else {
+        return 'Error: ' . $conn->error;
+    }
+    $conn->close();
+}
 ?>
