@@ -160,40 +160,7 @@ $vehicles = getVehicles($user['id']);
             </thead>
 
             <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
-                <tr class="*:text-gray-900 *:first:font-medium dark:*:text-white">
-                    <td class="px-3 py-2 whitespace-nowrap">Nandor the Relentless</td>
-                    <td class="px-3 py-2 whitespace-nowrap">04/06/1262</td>
-                    <td class="px-3 py-2 whitespace-nowrap">Vampire Warrior</td>
-                    <td class="px-3 py-2 whitespace-nowrap">$0</td>
-                </tr>
-
-                <tr class="*:text-gray-900 *:first:font-medium dark:*:text-white">
-                    <td class="px-3 py-2 whitespace-nowrap">Laszlo Cravensworth</td>
-                    <td class="px-3 py-2 whitespace-nowrap">19/10/1678</td>
-                    <td class="px-3 py-2 whitespace-nowrap">Vampire Gentleman</td>
-                    <td class="px-3 py-2 whitespace-nowrap">$0</td>
-                </tr>
-
-                <tr class="*:text-gray-900 *:first:font-medium dark:*:text-white">
-                    <td class="px-3 py-2 whitespace-nowrap">Nadja</td>
-                    <td class="px-3 py-2 whitespace-nowrap">15/03/1593</td>
-                    <td class="px-3 py-2 whitespace-nowrap">Vampire Seductress</td>
-                    <td class="px-3 py-2 whitespace-nowrap">$0</td>
-                </tr>
-
-                <tr class="*:text-gray-900 *:first:font-medium dark:*:text-white">
-                    <td class="px-3 py-2 whitespace-nowrap">Colin Robinson</td>
-                    <td class="px-3 py-2 whitespace-nowrap">01/09/1971</td>
-                    <td class="px-3 py-2 whitespace-nowrap">Energy Vampire</td>
-                    <td class="px-3 py-2 whitespace-nowrap">$53,000</td>
-                </tr>
-
-                <tr class="*:text-gray-900 *:first:font-medium dark:*:text-white">
-                    <td class="px-3 py-2 whitespace-nowrap">Guillermo de la Cruz</td>
-                    <td class="px-3 py-2 whitespace-nowrap">18/11/1991</td>
-                    <td class="px-3 py-2 whitespace-nowrap">Familiar/Vampire Hunter</td>
-                    <td class="px-3 py-2 whitespace-nowrap">$0</td>
-                </tr>
+                <tr></tr>
             </tbody>
         </table>
     </div>
@@ -230,7 +197,7 @@ $vehicles = getVehicles($user['id']);
                             </button>
                         </div>
                         <!-- Modal body -->
-                        <form class="p-4 md:p-5" action="/post/insert.php" method="POST">
+                        <form class="p-4 md:p-5" action="/post/insert.php" method="POST" enctype="multipart/form-data">
                             <input type="hidden" name="action" value="register_vehicle">
                             <div class="grid gap-4 mb-4 grid-cols-2 text-center">
                                 <div class="col-span-2">
@@ -244,7 +211,7 @@ $vehicles = getVehicles($user['id']);
                                 <div class="col-span-2 sm:col-span-1">
                                     <label for="color"
                                         class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Color</label>
-                                    <select id="color" name="color" id="color"
+                                    <select id="color" name="color"
                                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
                                         <option selected="">Select color</option>
                                         <option value="Blue">Blue</option>
@@ -334,6 +301,13 @@ $vehicles = getVehicles($user['id']);
                     </tr>
                 <?php else: ?>
                     <?php foreach ($vehicles as $vehicle): ?>
+                        <?php
+                        $uid = htmlspecialchars($vehicle['plate_id']);//identificador único por fila
+                        $mid = "vehicle-modify-modal-$uid";                   //id único del modal Modify
+                        $did = "vehicle-delete-modal-$uid";                   //id único del modal Delete
+                        $fileId = "modify-vehicle-picture-$uid";              //id único para el input file
+                        $imgUrl = rtrim(BASE_URL ?? '', '/') . htmlspecialchars($vehicle['vehicle_picture']); // URL completa
+                        ?>
                         <tr class="*:text-gray-900 *:first:font-medium dark:*:text-white ">
                             <td class="px-3 py-2 whitespace-nowrap">
                                 <?= $vehicle['plate_id'] ?>
@@ -354,15 +328,15 @@ $vehicles = getVehicles($user['id']);
                                 <?= $vehicle['seats'] ?>
                             </td>
                             <td class="px-3 py-2 whitespace-nowrap">
-                                <img src="<?= htmlspecialchars($vehicle['vehicle_picture']) ?>" alt="Vehicle picture"
+                                <img src="<?= $imgUrl ?>" alt="Vehicle picture"
                                     class="h-8 w-24 object-cover rounded-lg mx-auto">
                             </td>
                             <td class="px-3 py-2 whitespace-nowrap">
-                                <button data-modal-target="vehicle-modify-modal" data-modal-toggle="vehicle-modify-modal"
+                                <button data-modal-target="<?= $mid ?>" data-modal-toggle="<?= $mid ?>"
                                     class="inline-flex items-center rounded-lg bg-yellow-500 px-5 py-2.5 text-xs font-medium uppercase leading-normal text-white shadow transition hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-500 active:bg-yellow-600">
                                     Modify
                                 </button>
-                                <div id="vehicle-modify-modal" tabindex="-1" aria-hidden="true"
+                                <div id="<?= $mid ?>" tabindex="-1" aria-hidden="true"
                                     class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
                                     <div class="relative p-4 w-full max-w-md max-h-full">
                                         <!-- Modal content -->
@@ -371,11 +345,11 @@ $vehicles = getVehicles($user['id']);
                                             <div
                                                 class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600 border-gray-200">
                                                 <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
-                                                    Add new vehicle
+                                                    Modify vehicle
                                                 </h3>
                                                 <button type="button"
                                                     class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                                                    data-modal-toggle="vehicle-modify-modal">
+                                                    data-modal-toggle="<?= $mid ?>">
                                                     <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
                                                         fill="none" viewBox="0 0 14 14">
                                                         <path stroke="currentColor" stroke-linecap="round"
@@ -386,23 +360,33 @@ $vehicles = getVehicles($user['id']);
                                                 </button>
                                             </div>
                                             <!-- Modal body -->
-                                            <form class="p-4 md:p-5" action="/post/insert.php" method="POST">
-                                                <input type="hidden" name="action" value="register_vehicle">
+                                            <form class="p-4 md:p-5" action="/post/modify.php" method="POST"
+                                                enctype="multipart/form-data">
+                                                <input type="hidden" name="action" value="modify_vehicle">
                                                 <div class="grid gap-4 mb-4 grid-cols-2">
                                                     <div class="col-span-2">
                                                         <label for="plate_id"
                                                             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Plate
                                                             Id</label>
-                                                        <input type="text" name="plate_id" id="plate_id"
+                                                        <input type="text" value="<?= $vehicle['plate_id'] ?>"
                                                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                                            placeholder="Type plate Id. Example: (ABC-123)" required="">
+                                                            placeholder="Type plate Id. Example: (ABC-123)" disabled>
+
+                                                        <input type="hidden" name="plate_id" id="plate_id"
+                                                            value="<?= $vehicle['plate_id'] ?>">
                                                     </div>
                                                     <div class="col-span-2 sm:col-span-1">
                                                         <label for="color"
                                                             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Color</label>
-                                                        <select id="color" name="color" id="color"
-                                                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
-                                                            <option selected="">Select color</option>
+                                                        <select id="color" name="color" class=" bg-gray-50 border border-gray-300 text-gray-900
+                                                            text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500
+                                                            block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500
+                                                            dark:placeholder-gray-400 dark:text-white
+                                                            dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                                            <option value="<?= $vehicle['color'] ?>"
+                                                                selected="<?= $vehicle['color'] ?>">Selected
+                                                                color:<?= $vehicle['color'] ?>
+                                                            </option>
                                                             <option value="Blue">Blue</option>
                                                             <option value="Yellow">Yellow</option>
                                                             <option value="Green">Green</option>
@@ -416,6 +400,7 @@ $vehicles = getVehicles($user['id']);
                                                         <label for="brand"
                                                             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Brand</label>
                                                         <input type="text" name="brand" id="brand"
+                                                            value="<?= $vehicle['brand'] ?>"
                                                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                                             placeholder="Toyota" required="">
                                                     </div>
@@ -424,6 +409,7 @@ $vehicles = getVehicles($user['id']);
                                                             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Model
                                                         </label>
                                                         <input type="text" name="model" id="model"
+                                                            value="<?= $vehicle['model'] ?>"
                                                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                                             placeholder="Type vehicle model" required="">
                                                     </div>
@@ -431,6 +417,7 @@ $vehicles = getVehicles($user['id']);
                                                         <label for="year"
                                                             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Year</label>
                                                         <input type="number" name="year" id="year"
+                                                            value="<?= $vehicle['year'] ?>"
                                                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                                             placeholder="2025" required="">
                                                     </div>
@@ -439,17 +426,21 @@ $vehicles = getVehicles($user['id']);
                                                             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Seats
                                                             capacity</label>
                                                         <input type="number" name="seats" id="seats"
+                                                            value="<?= $vehicle['seats'] ?>"
                                                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                                             placeholder="5" required="">
                                                     </div>
                                                     <div class="col-span-2">
-                                                        <label for="vehicle-picture"
-                                                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Vehicle
+                                                        <label for="<?= $fileId ?>
+                                                            class=" block mb-2 text-sm font-medium text-gray-900
+                                                            dark:text-white">Vehicle
                                                             picture
                                                         </label>
-                                                        <input type="file" name="vehicle-picture" id="vehicle-picture"
-                                                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                                            required="">
+                                                        <img src="<?= $imgUrl ?>" alt="Vehicle picture"
+                                                            class="h-12 w-24 object-cover rounded-lg mx-auto">
+                                                        <input type="file" name="modify-vehicle-picture" id="<?= $fileId ?>"
+                                                            accept="image/*"
+                                                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
                                                     </div>
                                                 </div>
                                                 <button type="submit"
@@ -460,7 +451,7 @@ $vehicles = getVehicles($user['id']);
                                                             d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
                                                             clip-rule="evenodd"></path>
                                                     </svg>
-                                                    Add new vehicle
+                                                    Modify vehicle
                                                 </button>
                                             </form>
                                         </div>
@@ -468,11 +459,11 @@ $vehicles = getVehicles($user['id']);
                                 </div>
                             </td>
                             <td class="px-3 py-2 whitespace-nowrap">
-                                <button data-modal-target="vehicle-delete-modal" data-modal-toggle="vehicle-delete-modal"
+                                <button data-modal-target="<?= $did ?>" data-modal-toggle="<?= $did ?>"
                                     class="inline-flex items-center rounded-lg bg-red-600 px-5 py-2.5 text-xs font-medium uppercase leading-normal text-white shadow transition hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 active:bg-red-700">
                                     Delete
                                 </button>
-                                <div id="vehicle-delete-modal" tabindex="-1" aria-hidden="true"
+                                <div id="<?= $did ?>" tabindex="-1" aria-hidden="true"
                                     class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
                                     <div class="relative p-4 w-full max-w-md max-h-full">
                                         <!-- Modal content -->
@@ -485,7 +476,7 @@ $vehicles = getVehicles($user['id']);
                                                 </h3>
                                                 <button type="button"
                                                     class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                                                    data-modal-toggle="vehicle-delete-modal">
+                                                    data-modal-toggle="<?= $did ?>">
                                                     <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
                                                         fill="none" viewBox="0 0 14 14">
                                                         <path stroke="currentColor" stroke-linecap="round"
@@ -496,14 +487,16 @@ $vehicles = getVehicles($user['id']);
                                                 </button>
                                             </div>
                                             <!-- Modal body -->
-                                            <form class="p-4 md:p-5" action="/post/insert.php" method="POST">
-                                                <input type="hidden" name="action" value="register_vehicle">
+                                            <form class="p-4 md:p-5" action="/post/delete.php" method="POST">
+                                                <input type="hidden" name="action" value="delete_vehicle">
                                                 <div class="grid gap-4 mb-4 grid-cols-2 text-center">
                                                     <div class="col-span-2">
-                                                        <label for="vehicle-text"
-                                                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Are
+                                                        <p class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                            Are
                                                             you sure you want to delete this vehicle?
-                                                        </label>
+                                                        </p>
+                                                        <input type="hidden" name="plate_id" id="plate_id"
+                                                            value="<?= $vehicle["plate_id"] ?>">
                                                     </div>
                                                 </div>
                                                 <button type="submit"
@@ -528,4 +521,3 @@ $vehicles = getVehicles($user['id']);
         </table>
     </div>
 </div>
-
