@@ -1,17 +1,29 @@
 <?php
 require_once __DIR__ . '/../config/session.php';
 require_once __DIR__ . '/../models/showdata.php';
+
+require_once __DIR__ . '/../common/auth_guard.php';
+
 $user = $_SESSION['user'] ?? null;
 $vehicles = getVehicles($user['id']);
 ?>
 
-
 <div class="min-h-full w-full ">
     <div>
-        <h1 class="text-2xl font-bold">Bienvenido, <?= htmlspecialchars($user['first_name']) ?> 👋</h1>
-        <p class="text-gray-500">Tu rol actual es: <strong><?= htmlspecialchars($user['user_type']) ?></strong></p>
-    </div>
+        <div>
+            <h1 class="text-2xl font-bold">Bienvenido, <?= htmlspecialchars($user['first_name']) ?> 👋</h1>
+            <p class="text-gray-500">Tu rol actual es: <strong><?= htmlspecialchars($user['user_type']) ?></strong></p>
+        </div>
+        <div>
+            <form action="/post/logout.php" method="POST">
+                <button type="submit"
+                    class="group flex items-center justify-between gap-3 rounded-lg border border-indigo-600 px-5 py-3 text-indigo-600 transition-all duration-200 hover:bg-indigo-600 hover:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    <span class="font-medium">Cerrar sesión</span>
 
+                </button>
+            </form>
+        </div>
+    </div>
     <div class="max-h-46 overflow-x-auto p-8">
         <div class="flex items-center">
             <h2 class="">Your rides</h2>
