@@ -13,10 +13,9 @@ $brand = $_POST["brand"];
 $model = $_POST["model"];
 $year = $_POST["year"];
 $seats = $_POST["seats"];
-$vehicle_picture = $_FILES["vehicle-picture"];
 $driverId = $user['id'];
 
-if (!$plate_id || !$color || !$brand || !$model || !$year || !$seats || !$vehicle_picture || !$driverId) {
+if (!$plate_id || !$color || !$brand || !$model || !$year || !$seats || !$driverId) {
     exit('Missing required fields');
 }
 $rel_vehicle_picture = handleProfileUpload($_FILES["vehicle-picture"]);
