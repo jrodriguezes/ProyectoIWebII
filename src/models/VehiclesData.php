@@ -23,4 +23,49 @@ function getVehicles($userId)
     return $vehicles;
 }
 
+<<<<<<< HEAD:src/models/VehiclesData.php
+=======
+function getVehicleByPlate($plateId)
+{
+
+    $conn = getConnection();
+
+    $sql = "SELECT plate_id, driver_id, color, brand, model, year, seats, vehicle_picture
+                FROM vehicles
+                WHERE plate_id = '$plateId'";
+
+    $result = $conn->query($sql);
+
+    $vehicle = null;
+    if ($result->num_rows > 0) {
+        $vehicle = $result->fetch_assoc();
+    }
+
+    $conn->close();
+    return $vehicle;
+}
+
+function getRidesByDriver($driverId)
+{
+
+    $conn = getConnection();
+
+    $sql = "SELECT id, driver_id, vehicle_plate, name, origin, destination, days, departure_time, price_per_seat, seats_offered
+                FROM rides
+                WHERE driver_id = '$driverId'";
+
+    $result = $conn->query($sql);
+
+    $rides = [];
+    if ($result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $rides[] = $row;
+        }
+    }
+
+    $conn->close();
+    return $rides;
+}
+
+>>>>>>> main:src/models/ShowData.php
 ?>
