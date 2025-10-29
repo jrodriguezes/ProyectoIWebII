@@ -37,6 +37,7 @@ $_SESSION['user'] = [
     'first_name' => $user['first_name'],
     'user_type'  => $user['user_type'],
     'email'      => $user['email'],
+    'profile_photo' => $user['profile_photo'],
 ];
 
 header('Location: /home');
