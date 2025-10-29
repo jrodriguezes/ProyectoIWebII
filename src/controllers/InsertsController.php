@@ -20,6 +20,10 @@ switch ($action) {
         include __DIR__ . "/actions/insertVehicle.php";
         break;
 
+    case "register_ride":    
+        include __DIR__ . "/actions/insertRide.php";
+        break;
+        
     default:
         http_response_code(400);
         exit("Unknown insert action");

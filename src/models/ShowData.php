@@ -43,4 +43,26 @@ function getVehicleByPlate($plateId)
     return $vehicle;
 }
 
+function getRidesByDriver($driverId)
+{
+
+    $conn = getConnection();
+
+    $sql = "SELECT id, driver_id, vehicle_plate, name, origin, destination, days, departure_time, price_per_seat, seats_offered
+                FROM rides
+                WHERE driver_id = '$driverId'";
+
+    $result = $conn->query($sql);
+
+    $rides = [];
+    if ($result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $rides[] = $row;
+        }
+    }
+
+    $conn->close();
+    return $rides;
+}
+
 ?>
