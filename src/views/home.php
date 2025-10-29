@@ -10,6 +10,9 @@ $vehicles = getVehicles($user['id']);
 
 <div class="min-h-full w-full ">
     <div>
+        <?php include __DIR__ . "/layouts/navbar.php" ?>
+    </div>
+    <div>
         <div>
             <h1 class="text-2xl font-bold">Bienvenido, <?= htmlspecialchars($user['first_name']) ?> 👋</h1>
             <p class="text-gray-500">Tu rol actual es: <strong><?= htmlspecialchars($user['user_type']) ?></strong></p>
