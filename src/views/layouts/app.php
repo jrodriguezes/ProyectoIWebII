@@ -29,7 +29,7 @@
   </main>
 
   <footer class="mt-auto">
-    <?php include LAYOUT_PATH . '/nav.php'; ?>
+    <?php include LAYOUT_PATH . '/footer.php'; ?>
   </footer>
 
   <script src="<?= rtrim(BASE_URL, '/') ?>/assets/js/theme-toggle.js"></script>
