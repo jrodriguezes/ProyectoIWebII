@@ -9,11 +9,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
   toggleSwitch.addEventListener("change", function () {
     if (toggleSwitch.checked) {
-      hiddenInput.value = "Driver";
-      userTypeLabel.textContent = "Driver";
+      hiddenInput.value = "driver";
+      userTypeLabel.textContent = "driver";
     } else {
-      hiddenInput.value = "Passenger";
-      userTypeLabel.textContent = "Passenger";
+      hiddenInput.value = "passenger";
+      userTypeLabel.textContent = "passenger";
     }
   });
 });
