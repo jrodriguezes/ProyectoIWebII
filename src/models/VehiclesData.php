@@ -23,6 +23,8 @@ function getVehicles($userId)
     return $vehicles;
 }
 
+<<<<<<< HEAD:src/models/VehiclesData.php
+=======
 function getVehicleByPlate($plateId)
 {
 
@@ -65,4 +67,5 @@ function getRidesByDriver($driverId)
     return $rides;
 }
 
+>>>>>>> main:src/models/ShowData.php
 ?>
