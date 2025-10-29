@@ -8,7 +8,6 @@ $user = $_SESSION['user'];
 $vehicles = getVehicles($user['id']);
 $rides = getRidesByDriver($user['id']);
 
-var_dump($rides);
 ?>
 
 <div class="min-h-full w-full ">
