@@ -15,4 +15,19 @@ function deleteVehicle($plate_id, $driver_id)
 
 }
 
+function deleteRide($ride_id)
+{
+    $conn = getConnection();
+
+    $sql = "DELETE FROM rides where id = '$ride_id'";
+
+    if ($conn->query($sql) === TRUE) {
+        return true;
+    } else {
+        return false;
+    }
+    $conn->close();
+
+}
+
 ?>

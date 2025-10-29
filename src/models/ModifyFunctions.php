@@ -27,4 +27,27 @@ function modifyVehicle($plate_id, $color, $brand, $model, $year, $seats, $vehicl
     $conn->close();
 }
 
+function uptateRide($ride_id, $name, $origin, $destination, $days, $departure_time, $price_per_seat, $seats_offered)
+{
+    $conn = getConnection();
+
+    $sql = "UPDATE rides SET 
+                name = '$name',
+                origin = '$origin',
+                destination = '$destination',
+                days = '$days',
+                departure_time = '$departure_time',
+                price_per_seat = '$price_per_seat',
+                seats_offered = '$seats_offered'
+            WHERE id = '$ride_id'";
+
+    if ($conn->query($sql) === TRUE) {
+        return true;
+    } else {
+        return 'Error: ' . $conn->error;
+    }
+
+    $conn->close();
+}
+
 ?>

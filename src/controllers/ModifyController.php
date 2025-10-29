@@ -8,6 +8,9 @@ switch ($action) {
     case "modify_vehicle":
         include __DIR__ . "/actions/modifyVehicle.php";
         break;
+    case "modify_ride";
+        include __DIR__ . "/actions/modifyRide.php";
+        break;    
 }
 
 ?>
