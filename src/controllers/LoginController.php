@@ -10,11 +10,6 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 $email    = trim($_POST['floating_email'] ?? '');
 $password = $_POST['floating_password'] ?? '';
 
-if ($email === '' || $password === '') {
-    header('Location: /login?error=missing');
-    exit();
-}
-
 $user = findUserByEmail($email);
 
 if (!$user) {
@@ -23,7 +18,7 @@ if (!$user) {
 }
 
 if ($user['status'] !== 'active') {
-    header('Location: /login?error=inactive'); // pending o inactive
+    header('Location: /login?error=inactive');
     exit();
 }
 

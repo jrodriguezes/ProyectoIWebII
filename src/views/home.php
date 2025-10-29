@@ -1,10 +1,10 @@
 <?php
 require_once __DIR__ . '/../config/session.php';
-require_once __DIR__ . '/../models/showdata.php';
+require_once __DIR__ . '/../models/VehiclesData.php';
 
 require_once __DIR__ . '/../common/auth_guard.php';
 
-$user = $_SESSION['user'] ?? null;
+$user = $_SESSION['user'];
 $vehicles = getVehicles($user['id']);
 ?>
 
