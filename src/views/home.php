@@ -8,6 +8,7 @@ $user = $_SESSION['user'];
 $vehicles = getVehicles($user['id']);
 $rides = getRidesByDriver($user['id']);
 
+var_dump($rides);
 ?>
 
 <div class="min-h-full w-full ">
@@ -277,7 +278,7 @@ $rides = getRidesByDriver($user['id']);
                                 $daysString .= "Friday, ";
                             }
                             if (strpos($ride['days'], 'Sa') !== false) {
-                                $daysString .= "Saturdasy, ";
+                                $daysString .= "Saturday, ";
                             }
                             if (strpos($ride['days'], 'Su') !== false) {
                                 $daysString .= "Sunday, ";
