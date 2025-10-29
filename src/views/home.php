@@ -241,6 +241,12 @@ $rides = getRidesByDriver($user['id']);
 
             <tbody class="divide-y divide-gray-200 dark:divide-gray-700 text-center">
                 <?php foreach ($rides as $ride): ?>
+                    <?php
+                    $uid = htmlspecialchars($ride['id']);//identificador único por fila
+                    $mid = "ride-modify-modal-$uid";                   //id único del modal Modify
+                    $did = "ride-delete-modal-$uid";                   //id único del modal Delete
+                
+                    ?>
                     <tr class="*:text-gray-900 *:first:font-medium dark:*:text-white">
                         <td class="px-3 py-2 whitespace-nowrap">
                             <?= htmlspecialchars($ride['id']) ?>
@@ -296,184 +302,207 @@ $rides = getRidesByDriver($user['id']);
                         </td>
                         <td class="px-3 py-2 whitespace-nowrap">
                             <button data-modal-target="<?= $mid ?>" data-modal-toggle="<?= $mid ?>"
-                                class="inline-flex items-center rounded-lg bg-yellow-500 px-5 py-2.5 text-xs font-medium uppercase leading-normal text-white shadow transition hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-500 active:bg-yellow-600">
+                                class="rounded-lg bg-yellow-500 px-4 py-2 text-white">
                                 Modify
                             </button>
-                            <div id="<?= $mid ?>" tabindex="-1" aria-hidden="true"
-                                class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
-                                <div class="relative p-4 w-full max-w-md max-h-full">
-                                    <!-- Modal content -->
-                                    <div class="relative bg-white rounded-lg shadow-sm dark:bg-gray-700">
-                                        <!-- Modal header -->
-                                        <div
-                                            class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600 border-gray-200">
-                                            <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
-                                                Modify vehicle
-                                            </h3>
-                                            <button type="button"
-                                                class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                                                data-modal-toggle="<?= $mid ?>">
-                                                <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                                                    fill="none" viewBox="0 0 14 14">
-                                                    <path stroke="currentColor" stroke-linecap="round"
-                                                        stroke-linejoin="round" stroke-width="2"
-                                                        d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
-                                                </svg>
-                                                <span class="sr-only">Close modal</span>
-                                            </button>
-                                        </div>
-                                        <!-- Modal body -->
-                                        <form class="p-4 md:p-5" action="/post/modify.php" method="POST"
-                                            enctype="multipart/form-data">
-                                            <input type="hidden" name="action" value="modify_vehicle">
-                                            <div class="grid gap-4 mb-4 grid-cols-2">
-                                                <div class="col-span-2">
-                                                    <label for="plate_id"
-                                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Plate
-                                                        Id</label>
-                                                    <input type="text" value="<?= $vehicle['plate_id'] ?>"
-                                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                                        placeholder="Type plate Id. Example: (ABC-123)" disabled>
+                            <!-- Modal MODIFICAR -->
+                            <div id="<?= $mid ?>" aria-hidden="true"
+                                class="hidden fixed inset-0 z-50 flex items-center justify-center">
+                                <div class="bg-white dark:bg-gray-700 rounded-lg shadow p-4 w-full max-w-md">
+                                    <div class="flex items-center justify-between border-b pb-2 mb-4">
+                                        <h3 class="text-lg font-semibold">Modify ride #<?= $uid ?></h3>
+                                        <button data-modal-toggle="<?= $mid ?>" class="p-2">✕</button>
+                                    </div>
 
-                                                    <input type="hidden" name="plate_id" id="plate_id"
-                                                        value="<?= $vehicle['plate_id'] ?>">
-                                                </div>
-                                                <div class="col-span-2 sm:col-span-1">
-                                                    <label for="color"
-                                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Color</label>
-                                                    <select id="color" name="color" class=" bg-gray-50 border border-gray-300 text-gray-900
-                                                            text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500
-                                                            block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500
-                                                            dark:placeholder-gray-400 dark:text-white
-                                                            dark:focus:ring-primary-500 dark:focus:border-primary-500">
-                                                        <option value="<?= $vehicle['color'] ?>"
-                                                            selected="<?= $vehicle['color'] ?>">Selected
-                                                            color:<?= $vehicle['color'] ?>
-                                                        </option>
-                                                        <option value="Blue">Blue</option>
-                                                        <option value="Yellow">Yellow</option>
-                                                        <option value="Green">Green</option>
-                                                        <option value="White">White</option>
-                                                        <option value="Cyan">Cyan</option>
-                                                        <option value="Gray">Gray</option>
-                                                        <option value="Red">Red</option>
-                                                    </select>
-                                                </div>
-                                                <div class="col-span-2 sm:col-span-1">
-                                                    <label for="brand"
-                                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Brand</label>
-                                                    <input type="text" name="brand" id="brand"
-                                                        value="<?= $vehicle['brand'] ?>"
-                                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                                        placeholder="Toyota" required="">
-                                                </div>
-                                                <div class="col-span-2">
-                                                    <label for="model"
-                                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Model
+                                    <form class="p-4 md:p-5" action="/post/modify.php" method="POST">
+                                        <input type="hidden" name="action" value="modify_ride">
+                                        <input type="hidden" name="ride_id" value="<?= htmlspecialchars($ride['id']) ?>">
+
+                                        <div class="grid gap-4 mb-4 grid-cols-2">
+                                            <!-- Name -->
+                                            <div class="col-span-2">
+                                                <label for="name"
+                                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Name</label>
+                                                <input type="text" name="name" id="name"
+                                                    value="<?= htmlspecialchars($ride['name']) ?>"
+                                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                                    placeholder="Type ride name or some description" required>
+                                            </div>
+
+                                            <!-- Vehicle -->
+                                            <div class="col-span-2">
+                                                <label for="vehicle_id"
+                                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Vehicle</label>
+                                                <select id="vehicle_id" name="vehicle_id"
+                                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                                    required>
+                                                    <option value="" disabled>Select your vehicle</option>
+                                                    <?php
+                                                    $vehiclesList = getVehicles($user['id']);
+                                                    foreach ($vehiclesList as $vehicle):
+                                                        $plate = htmlspecialchars($vehicle['plate_id']);
+                                                        $label = htmlspecialchars($vehicle['brand'] . ' ' . $vehicle['model'] . ' (' . $vehicle['plate_id'] . ')');
+                                                        $selected = ($vehicle['plate_id'] === $ride['vehicle_plate']) ? 'selected' : '';
+                                                        ?>
+                                                        <option value="<?= $plate ?>" <?= $selected ?>><?= $label ?></option>
+                                                    <?php endforeach; ?>
+                                                </select>
+                                            </div>
+
+                                            <!-- Origin (departure) -->
+                                            <div class="col-span-2 sm:col-span-1">
+                                                <label for="origin"
+                                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                    Place departure (San Carlos)
+                                                </label>
+                                                <select id="origin" name="origin"
+                                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                                    required>
+                                                    <?php
+                                                    $places = ['ciudadquesada', 'florencia', 'quesada', 'pital', 'cutris', 'venecia', 'aguasarcas', 'pocosol', 'la_fortuna', 'palmera', 'venado', 'monterrey'];
+                                                    echo '<option value="" disabled>Select place of departure</option>';
+                                                    foreach ($places as $p) {
+                                                        $sel = ($ride['origin'] === $p) ? 'selected' : '';
+                                                        $text = ucwords(str_replace('_', ' ', $p));
+                                                        echo '<option value="' . htmlspecialchars($p) . '" ' . $sel . '>' . htmlspecialchars($text) . '</option>';
+                                                    }
+                                                    ?>
+                                                </select>
+                                            </div>
+
+                                            <!-- Destination (arrival) -->
+                                            <div class="col-span-2 sm:col-span-1">
+                                                <label for="destination"
+                                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                    Place arrival (San Carlos)
+                                                </label>
+                                                <select id="destination" name="destination"
+                                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                                    required>
+                                                    <?php
+                                                    echo '<option value="" disabled>Select place of arrival</option>';
+                                                    foreach ($places as $p) {
+                                                        $sel = ($ride['destination'] === $p) ? 'selected' : '';
+                                                        $text = ucwords(str_replace('_', ' ', $p));
+                                                        echo '<option value="' . htmlspecialchars($p) . '" ' . $sel . '>' . htmlspecialchars($text) . '</option>';
+                                                    }
+                                                    ?>
+                                                </select>
+                                            </div>
+
+                                            <!-- Days -->
+                                            <div class="col-span-2">
+                                                <label for="days"
+                                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Days</label>
+                                                <div class="flex flex-wrap gap-4">
+                                                    <?php
+                                                    // si en DB guardas "Mo Tu We", marcamos con strpos
+                                                    $has = fn($abbr) => (strpos($ride['days'], $abbr) !== false) ? 'checked' : '';
+                                                    ?>
+                                                    <label class="flex items-center gap-2">
+                                                        <input type="checkbox" class="accent-black" name="monday" value="Mo"
+                                                            <?= $has('Mo') ?>> Monday
                                                     </label>
-                                                    <input type="text" name="model" id="model"
-                                                        value="<?= $vehicle['model'] ?>"
-                                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                                        placeholder="Type vehicle model" required="">
-                                                </div>
-                                                <div class="col-span-2 sm:col-span-1">
-                                                    <label for="year"
-                                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Year</label>
-                                                    <input type="number" name="year" id="year"
-                                                        value="<?= $vehicle['year'] ?>"
-                                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                                        placeholder="2025" required="">
-                                                </div>
-                                                <div class="col-span-2 sm:col-span-1">
-                                                    <label for="seats"
-                                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Seats
-                                                        capacity</label>
-                                                    <input type="number" name="seats" id="seats"
-                                                        value="<?= $vehicle['seats'] ?>"
-                                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                                        placeholder="5" required="">
-                                                </div>
-                                                <div class="col-span-2">
-                                                    <label for="<?= $fileId ?>
-                                                            class=" block mb-2 text-sm font-medium text-gray-900
-                                                        dark:text-white">Vehicle
-                                                        picture
+                                                    <label class="flex items-center gap-2">
+                                                        <input type="checkbox" class="accent-black" name="tuesday"
+                                                            value="Tu" <?= $has('Tu') ?>> Tuesday
                                                     </label>
-                                                    <img src="<?= $imgUrl ?>" alt="Vehicle picture"
-                                                        class="h-12 w-24 object-cover rounded-lg mx-auto">
-                                                    <input type="file" name="modify-vehicle-picture" id="<?= $fileId ?>"
-                                                        accept="image/*"
-                                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                                    <label class="flex items-center gap-2">
+                                                        <input type="checkbox" class="accent-black" name="wednesday"
+                                                            value="We" <?= $has('We') ?>> Wednesday
+                                                    </label>
+                                                    <label class="flex items-center gap-2">
+                                                        <input type="checkbox" class="accent-black" name="thursday"
+                                                            value="Th" <?= $has('Th') ?>> Thursday
+                                                    </label>
+                                                    <label class="flex items-center gap-2">
+                                                        <input type="checkbox" class="accent-black" name="friday" value="Fr"
+                                                            <?= $has('Fr') ?>> Friday
+                                                    </label>
+                                                    <label class="flex items-center gap-2">
+                                                        <input type="checkbox" class="accent-black" name="saturday"
+                                                            value="Sa" <?= $has('Sa') ?>> Saturday
+                                                    </label>
+                                                    <label class="flex items-center gap-2">
+                                                        <input type="checkbox" class="accent-black" name="sunday" value="Su"
+                                                            <?= $has('Su') ?>> Sunday
+                                                    </label>
                                                 </div>
                                             </div>
-                                            <button type="submit"
-                                                class="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                                                <svg class="me-1 -ms-1 w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
-                                                    xmlns="http://www.w3.org/2000/svg">
-                                                    <path fill-rule="evenodd"
-                                                        d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
-                                                        clip-rule="evenodd"></path>
-                                                </svg>
-                                                Modify vehicle
-                                            </button>
-                                        </form>
-                                    </div>
+
+                                            <!-- Departure time -->
+                                            <div class="col-span-2">
+                                                <label for="departure_time"
+                                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                    Departure time
+                                                </label>
+                                                <input type="time" name="departure_time" id="departure_time"
+                                                    value="<?= htmlspecialchars(substr($ride['departure_time'], 0, 5)) /* HH:MM */ ?>"
+                                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                                    required>
+                                            </div>
+
+                                            <!-- Price per seat -->
+                                            <div class="col-span-2 sm:col-span-1">
+                                                <label for="price_per_seat"
+                                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                    Price per seat
+                                                </label>
+                                                <input type="number" step="0.01" name="price_per_seat" id="price_per_seat"
+                                                    value="<?= htmlspecialchars($ride['price_per_seat']) ?>"
+                                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                                    placeholder="10.00" required>
+                                            </div>
+
+                                            <!-- Seats offered -->
+                                            <div class="col-span-2 sm:col-span-1">
+                                                <label for="seats_offered"
+                                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                    Seats
+                                                </label>
+                                                <input type="number" name="seats_offered" id="seats_offered"
+                                                    value="<?= htmlspecialchars($ride['seats_offered']) ?>"
+                                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                                    placeholder="5" required>
+                                            </div>
+                                        </div>
+
+                                        <button type="submit"
+                                            class="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                                            <svg class="me-1 -ms-1 w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <path fill-rule="evenodd"
+                                                    d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
+                                                    clip-rule="evenodd"></path>
+                                            </svg>
+                                            Save changes
+                                        </button>
+                                    </form>
+
                                 </div>
                             </div>
                         </td>
                         <td class="px-3 py-2 whitespace-nowrap">
+                            <!-- Botón ELIMINAR -->
                             <button data-modal-target="<?= $did ?>" data-modal-toggle="<?= $did ?>"
-                                class="inline-flex items-center rounded-lg bg-red-600 px-5 py-2.5 text-xs font-medium uppercase leading-normal text-white shadow transition hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 active:bg-red-700">
+                                class="rounded-lg bg-red-600 px-4 py-2 text-white">
                                 Delete
                             </button>
-                            <div id="<?= $did ?>" tabindex="-1" aria-hidden="true"
-                                class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
-                                <div class="relative p-4 w-full max-w-md max-h-full">
-                                    <!-- Modal content -->
-                                    <div class="relative bg-white rounded-lg shadow-sm dark:bg-gray-700">
-                                        <!-- Modal header -->
-                                        <div
-                                            class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600 border-gray-200">
-                                            <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
-                                                Delete vehicle
-                                            </h3>
-                                            <button type="button"
-                                                class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                                                data-modal-toggle="<?= $did ?>">
-                                                <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                                                    fill="none" viewBox="0 0 14 14">
-                                                    <path stroke="currentColor" stroke-linecap="round"
-                                                        stroke-linejoin="round" stroke-width="2"
-                                                        d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
-                                                </svg>
-                                                <span class="sr-only">Close modal</span>
-                                            </button>
-                                        </div>
-                                        <!-- Modal body -->
-                                        <form class="p-4 md:p-5" action="/post/delete.php" method="POST">
-                                            <input type="hidden" name="action" value="delete_vehicle">
-                                            <div class="grid gap-4 mb-4 grid-cols-2 text-center">
-                                                <div class="col-span-2">
-                                                    <p class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                                                        Are
-                                                        you sure you want to delete this vehicle?
-                                                    </p>
-                                                    <input type="hidden" name="plate_id" id="plate_id"
-                                                        value="<?= $vehicle["plate_id"] ?>">
-                                                </div>
-                                            </div>
-                                            <button type="submit"
-                                                class="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                                                <svg class="me-1 -ms-1 w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
-                                                    xmlns="http://www.w3.org/2000/svg">
-                                                    <path fill-rule="evenodd"
-                                                        d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
-                                                        clip-rule="evenodd"></path>
-                                                </svg>
-                                                Confirm delete
-                                            </button>
-                                        </form>
+
+                            <!-- Modal ELIMINAR -->
+                            <div id="<?= $did ?>" aria-hidden="true"
+                                class="hidden fixed inset-0 z-50 flex items-center justify-center">
+                                <div class="bg-white dark:bg-gray-700 rounded-lg shadow p-4 w-full max-w-md">
+                                    <div class="flex items-center justify-between border-b pb-2 mb-4">
+                                        <h3 class="text-lg font-semibold">Delete ride #<?= $uid ?></h3>
+                                        <button data-modal-toggle="<?= $did ?>" class="p-2">✕</button>
                                     </div>
+
+                                    <form action="/post/ride_delete.php" method="POST">
+                                        <input type="hidden" name="ride_id" value="<?= $uid ?>">
+                                        <p class="mb-4">Are you sure you want to delete this ride?</p>
+                                        <button class="bg-red-600 text-white px-4 py-2 rounded">Confirm delete</button>
+                                    </form>
                                 </div>
                             </div>
                         </td>
