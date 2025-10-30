@@ -14,6 +14,9 @@ $rides = getRidesByDriver($user['id']);
     <div>
         <?php include __DIR__ . "/layouts/navbar.php" ?>
     </div>
+    <div class="flex items-center">
+        <div><?php include COMP_PATH . '/theme-toggle.php'; ?></div>
+    </div>
     <div>
         <div>
             <h1 class="text-2xl font-bold">Bienvenido, <?= htmlspecialchars($user['first_name']) ?> 👋</h1>
@@ -204,7 +207,7 @@ $rides = getRidesByDriver($user['id']);
                 </div>
             </div>
         </div>
-        <table class="min-w-full divide-y-2 divide-gray-200 dark:divide-gray-700">
+        <table class="min-w-full divide-y-2 divide-gray-200 dark:divide-gray-700 dt-debug">
             <thead class="sticky top-0 bg-white ltr:text-left rtl:text-right dark:bg-gray-900">
                 <tr class="*:font-medium *:text-gray-900 dark:*:text-white">
                     <th class="px-3 py-2 whitespace-nowrap">Id</th>
@@ -854,13 +857,14 @@ $rides = getRidesByDriver($user['id']);
             <h2 class="text-base font-semibold text-gray-900 dark:text-gray-100">Search rides</h2>
         </div>
 
-
-        <div class="relative overflow-auto shadow-md sm:rounded-lg">
-            <table id="filter-table" class="w-full text-sm text-left rtl:text-right text-gray-700 dark:text-gray-200">
-                <thead class="text-xs uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-300">
+        <!-- Wrapper recomendado por Flowbite -->
+        <div class="relative overflow-auto shadow-md sm:rounded-lg tw-dt-fix">
+            <table id="filter-table">
+                <thead>
                     <tr>
-                        <th class="px-4 py-3">
-                            <span class="flex items-center">Name
+                        <th>
+                            <span class="flex items-center">
+                                Name
                                 <svg class="w-4 h-4 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
                                     width="24" height="24" fill="none" viewBox="0 0 24 24">
                                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
@@ -868,8 +872,9 @@ $rides = getRidesByDriver($user['id']);
                                 </svg>
                             </span>
                         </th>
-                        <th class="px-4 py-3">
-                            <span class="flex items-center">Category
+                        <th>
+                            <span class="flex items-center">
+                                Category
                                 <svg class="w-4 h-4 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
                                     width="24" height="24" fill="none" viewBox="0 0 24 24">
                                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
@@ -877,53 +882,59 @@ $rides = getRidesByDriver($user['id']);
                                 </svg>
                             </span>
                         </th>
-                        <th class="px-4 py-3"><span class="flex items-center">Brand
+                        <th>
+                            <span class="flex items-center">
+                                Brand
                                 <svg class="w-4 h-4 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
                                     width="24" height="24" fill="none" viewBox="0 0 24 24">
                                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
                                         stroke-width="2" d="m8 15 4 4 4-4m0-6-4-4-4 4" />
                                 </svg>
-                            </span></th>
-                        <th class="px-4 py-3"><span class="flex items-center">Price
+                            </span>
+                        </th>
+                        <th>
+                            <span class="flex items-center">
+                                Price
                                 <svg class="w-4 h-4 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
                                     width="24" height="24" fill="none" viewBox="0 0 24 24">
                                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
                                         stroke-width="2" d="m8 15 4 4 4-4m0-6-4-4-4 4" />
                                 </svg>
-                            </span></th>
-                        <th class="px-4 py-3"><span class="flex items-center">Stock
+                            </span>
+                        </th>
+                        <th>
+                            <span class="flex items-center">
+                                Stock
                                 <svg class="w-4 h-4 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
                                     width="24" height="24" fill="none" viewBox="0 0 24 24">
                                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
                                         stroke-width="2" d="m8 15 4 4 4-4m0-6-4-4-4 4" />
                                 </svg>
-                            </span></th>
-                        <th class="px-4 py-3"><span class="flex items-center">Total Sales
+                            </span>
+                        </th>
+                        <th>
+                            <span class="flex items-center">
+                                Total Sales
                                 <svg class="w-4 h-4 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
                                     width="24" height="24" fill="none" viewBox="0 0 24 24">
                                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
                                         stroke-width="2" d="m8 15 4 4 4-4m0-6-4-4-4 4" />
                                 </svg>
-                            </span></th>
-                        <th class="px-4 py-3"><span class="flex items-center">Status
-                                <svg class="w-4 h-4 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                                    width="24" height="24" fill="none" viewBox="0 0 24 24">
+                            </span>
+                        </th>
+                        <th>
+                            <span class="flex items-center">
+                                Status
+                                <svg class="w-4 h-4 ms-1" aria-hidden="" xmlns="http://www.w3.org/2000/svg" width="24"
+                                    height="24" fill="none" viewBox="0 0 24 24">
                                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
                                         stroke-width="2" d="m8 15 4 4 4-4m0-6-4-4-4 4" />
                                 </svg>
-                            </span></th>
+                            </span>
+                        </th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr class="border-b dark:border-gray-700">
-                        <td class="px-4 py-3 font-medium text-gray-900 dark:text-white">Apple iMac</td>
-                        <td class="px-4 py-3">Computers</td>
-                        <td class="px-4 py-3">Apple</td>
-                        <td class="px-4 py-3">$1,299</td>
-                        <td class="px-4 py-3">50</td>
-                        <td class="px-4 py-3">200</td>
-                        <td class="px-4 py-3">In Stock</td>
-                    </tr>
                     <tr>
                         <td class="font-medium text-gray-900 whitespace-nowrap dark:text-white">Apple iMac</td>
                         <td>Computers</td>

@@ -6,8 +6,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Aventones</title>
   <link rel="stylesheet" href="<?= rtrim(BASE_URL, '/') ?>/assets/css/tailwind.css">
+  <link rel="stylesheet" href="<?= rtrim(BASE_URL, '/') ?>/assets/css/search-rides-table.css">
   <link rel="icon" href="data:,">
-
 
   <script>
     const stored = localStorage.getItem('color-theme');
@@ -39,17 +39,10 @@
   <script src="<?= rtrim(BASE_URL, '/') ?>/assets/js/toggle-user-type.js"></script>
   <script src="<?= rtrim(BASE_URL, '/') ?>/assets/js/flowbite.min.js"></script>
 
-  <!-- CSS v9 -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simple-datatables@9.0.3/dist/style.css">
-
-  <!-- JS v9 UMD -->
-  <!-- <script src="https://cdn.jsdelivr.net/npm/simple-datatables@9.0.3/dist/umd/simple-datatables.umd.min.js"></script> -->
-
-  <!-- Tu inicializador (después de la librería) -->
+  //Librerias para que se muestre el css de search rides
+  <link rel="stylesheet" href="<?= rtrim(BASE_URL, '/') ?>/assets/vendor/simple-datatables/style.css">
+  <script src="<?= rtrim(BASE_URL, '/') ?>/assets/vendor/simple-datatables/simple-datatables.umd.js"></script>
   <script src="<?= rtrim(BASE_URL, '/') ?>/assets/js/filter-table.js"></script>
-
-
-
 
 </body>
 
