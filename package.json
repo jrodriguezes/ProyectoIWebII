@@ -25,5 +25,8 @@
     "url": "https://github.com/jrodriguezes/ProyectoIWebII/issues"
   },
   "homepage": "https://github.com/jrodriguezes/ProyectoIWebII#readme",
-  "description": ""
+  "description": "",
+  "dependencies": {
+    "simple-datatables": "^10.2.0"
+  }
 }
