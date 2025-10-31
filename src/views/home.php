@@ -483,7 +483,8 @@ $rides = getRidesByDriver($user['id']);
                                         <button data-modal-toggle="<?= $did ?>" class="p-2">✕</button>
                                     </div>
 
-                                    <form action="/post/ride_delete.php" method="POST">
+                                    <form action="/post/delete.php" method="POST">
+                                        <input type="hidden" name="action" value="delete_ride">
                                         <input type="hidden" name="ride_id" value="<?= $uid ?>">
                                         <p class="mb-4">Are you sure you want to delete this ride?</p>
                                         <button class="bg-red-600 text-white px-4 py-2 rounded">Confirm delete</button>

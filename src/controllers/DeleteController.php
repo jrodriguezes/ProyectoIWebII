@@ -6,5 +6,10 @@ switch ($action) {
     case "delete_vehicle":
         include __DIR__ . "/actions/deleteVehicle.php";
         break;
+    case "delete_ride":
+        include __DIR__ . "/actions/deleteRide.php";
+        break;    
 }
+
+
 ?>
