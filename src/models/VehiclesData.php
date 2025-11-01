@@ -45,4 +45,25 @@ function getRidesByDriver($driverId)
     return $rides;
 }
 
+function getAllRides()
+{
+
+    $conn = getConnection();
+
+    $sql = "SELECT v.plate_id ,v.model, v.year, v.brand,r.seats_offered, r.price_per_seat, r.days, r.departure_time, r.origin, r.destination FROM rides as r
+    left join vehicles as v on r.vehicle_plate = v.plate_id where r.status = 'active'";
+
+    $result = $conn->query($sql);
+
+    $rides = [];
+    if ($result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $rides[] = $row;
+        }
+    }
+
+    $conn->close();
+    return $rides;
+}
+
 ?>
