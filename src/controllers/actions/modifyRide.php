@@ -6,17 +6,9 @@ $vehicle_plate = $_POST['vehicle_id'];
 $origin = $_POST['origin'];
 $destination = $_POST['destination'];
 // reconstruir days según tus checkboxes individuales:
-$days = '';
-$days .= isset($_POST['monday']) ? 'Mo ' : '';
-$days .= isset($_POST['tuesday']) ? 'Tu ' : '';
-$days .= isset($_POST['wednesday']) ? 'We ' : '';
-$days .= isset($_POST['thursday']) ? 'Th ' : '';
-$days .= isset($_POST['friday']) ? 'Fr ' : '';
-$days .= isset($_POST['saturday']) ? 'Sa ' : '';
-$days .= isset($_POST['sunday']) ? 'Su ' : '';
-$days = trim($days);
 
-$departure_time = $_POST['departure_time'];     // "HH:MM"
+
+$departure_date = $_POST['departure_date'];     
 $price_per_seat = (float) $_POST['price_per_seat'];
 $seats_offered = (int) $_POST['seats_offered'];
 
@@ -26,8 +18,7 @@ $result = uptateRide(
     $name,
     $origin,
     $destination,
-    $days,
-    $departure_time,
+    $departure_date,
     $price_per_seat,
     $seats_offered
 );
