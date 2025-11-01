@@ -39,7 +39,7 @@
   <script src="<?= rtrim(BASE_URL, '/') ?>/assets/js/toggle-user-type.js"></script>
   <script src="<?= rtrim(BASE_URL, '/') ?>/assets/js/flowbite.min.js"></script>
 
-  //Librerias para que se muestre el css de search rides
+  <!-- Librerias para que se muestre el css de search rides -->
   <link rel="stylesheet" href="<?= rtrim(BASE_URL, '/') ?>/assets/vendor/simple-datatables/style.css">
   <script src="<?= rtrim(BASE_URL, '/') ?>/assets/vendor/simple-datatables/simple-datatables.umd.js"></script>
   <script src="<?= rtrim(BASE_URL, '/') ?>/assets/js/filter-table.js"></script>
