@@ -10,7 +10,10 @@ switch ($action) {
         break;
     case "modify_ride";
         include __DIR__ . "/actions/modifyRide.php";
-        break;    
+        break;
+    case "modify_user";
+        include __DIR__ . "/actions/modifyUser.php";
+        break;
 }
 
 ?>

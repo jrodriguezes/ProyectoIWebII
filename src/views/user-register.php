@@ -1,7 +1,7 @@
 <div class="form-container bg-white dark:bg-gray-800 shadow-lg rounded-xl p-8 w-full max-w-2xl">
     <form action="/post/insert.php" method="POST" class="max-w-xl mx-auto" id="registerForm"
         enctype="multipart/form-data">
-        <input type="hidden" name="action" value="register_user">
+        <input type="hidden" name="action" value="modify_user">
         <div class="flex items-center">
             <div><?php include COMP_PATH . '/theme-toggle.php'; ?></div>
             <div class="h-8"><?php include COMP_PATH . '/toggle.php'; ?></div>
@@ -84,13 +84,12 @@
         </div>
 
         <div class="relative z-0 w-full mb-5 group">
-            <input type="file" name="photo" id="photo" accept="image/*"
-                class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-                required />
             <label for="photo" class="block mt-2 text-sm font-medium text-gray-700 dark:text-gray-300">
                 Fotografía personal
             </label>
-
+            <input type="file" name="photo" id="photo" accept="image/*"
+                class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                required />
             <!-- <div class="mt-3">
                     <img id="preview"
                         class="hidden w-32 h-32 object-cover rounded-lg border border-gray-300 dark:border-gray-600"
