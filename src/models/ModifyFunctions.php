@@ -49,4 +49,55 @@ function uptateRide($ride_id, $name, $origin, $destination, $departure_date, $pr
     $conn->close();
 }
 
+
+function acceptResevations ($reservation_id){
+
+    $conn = getConnection();
+
+    $sql = "UPDATE reservations SET
+                status = 'accepted'
+            WHERE id = '$reservation_id'";
+
+    if($conn->query($sql) === TRUE) {
+        return true;
+    } else {
+        return 'Error: '. $conn->error;
+    }
+
+    $conn->close();
+}
+
+function rejectReservation ($reservation_id){
+    $conn = getConnection();
+
+    $sql = "UPDATE reservations SET
+                status = 'rejected'
+            WHERE id = '$reservation_id'";
+
+     if($conn->query($sql) === TRUE){
+        return true;
+     } else {
+        return 'Error: '. $conn->error;
+     }
+
+     $conn->close();
+}
+
+function cancelReservation ($reservation_id){
+
+    $conn = getConnection();
+
+    $sql = "UPDATE reservations SET
+                status = 'cancelled'
+            WHERE id = '$reservation_id'";
+
+    if ($conn->query($sql) === TRUE){
+        return true;
+    } else {
+        return 'Error: '. $conn->error;
+    }
+
+    $conn->close();
+}
+
 ?>

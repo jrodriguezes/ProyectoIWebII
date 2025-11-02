@@ -10,7 +10,17 @@ switch ($action) {
         break;
     case "modify_ride";
         include __DIR__ . "/actions/modifyRide.php";
-        break;    
+        break;   
+        
+    case "accept_reservation";
+        include __DIR__ . "/actions/modifyAcceptReservation.php";
+        break;
+    case "reject_reservation";
+        include __DIR__ . "/actions/modifyRejectReservation.php";
+        break; 
+    case "cancel_reservation";
+        include __DIR__ . "/actions/modifyCancelReservation.php";       
+        break;  
 }
 
 ?>
