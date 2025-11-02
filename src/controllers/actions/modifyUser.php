@@ -5,15 +5,13 @@ $id = $_POST["floating_id"];
 $first_name = $_POST["floating_first_name"];
 $last_name = $_POST["floating_last_name"];
 $birth_date = $_POST["date"];
-$email = $_POST["floating_email"];
 $phone_number = $_POST["floating_phone"];
 $profile_photo = $_FILES["photo"];
 $password_raw = $_POST["floating_password"];
 $password_raw_2 = $_POST["floating_repeat_password"];
-$user_type = $_POST["user_type"];
-$stateId = "pending";
+$user_type = $_POST["user-type"];
 
-if (!$id || !$first_name || !$last_name || !$birth_date || !$email || !$phone_number || !$user_type || !$password_raw || !$password_raw_2) {
+if (!$first_name || !$last_name || !$birth_date || !$phone_number || !$user_type || !$password_raw || !$password_raw_2) {
     exit('Missing required fields');
 }
 if ($password_raw !== $password_raw_2) {
@@ -25,22 +23,15 @@ $password = password_hash($password_raw, PASSWORD_BCRYPT);
 // 1) Subir foto
 $photo_rel = handleProfileUpload($_FILES['photo'] ?? null);
 
-// 2) Token de verificación
-[$token, $verify_hash, $verify_expires] = generateVerification();
-
-$result = insertUser(
+$result = updateProfile(
     $id,
     $first_name,
     $last_name,
-    $birth_date,
-    $email,
-    $phone_number,
-    $photo_rel,
     $password,
+    $phone_number,
+    $birth_date,
+    $photo_rel,
     $user_type,
-    $stateId,
-    $verify_hash,
-    $verify_expires
 );
 
 if ($result !== true) {
@@ -48,16 +39,10 @@ if ($result !== true) {
     exit();
 }
 
-// 4) URL y envío de email (servicio)
-$verifyUrl = "http://proyecto01webii.net:8080/verify-email?uid={$id}&token={$token}";
-try {
-    sendVerificationEmail($email, "$first_name $last_name", verifyUrl: $verifyUrl);
-} catch (Throwable $e) {
-    error_log('Mailer error: ' . $e->getMessage());
-}
+echo '<form id="logoutForm" action="/post/logout.php" method="POST"></form>
+<script>document.getElementById("logoutForm").submit();</script>';
+exit();
 
-
-header("Location: /check-your-email");
 exit();
 
 

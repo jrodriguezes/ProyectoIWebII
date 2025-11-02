@@ -1,19 +1,21 @@
 document.addEventListener("DOMContentLoaded", function () {
   const toggleSwitch = document.getElementById("userTypeSwitch");
-  const hiddenInput = document.getElementById("user-type");
+  const userType = document.getElementById("user-type");
   const userTypeLabel = document.getElementById("userTypeLabel");
+  const initialUserType = document.getElementById("initial_user_type");
 
-  if (!toggleSwitch || !hiddenInput || !userTypeLabel) {
-    return; 
+  const isEdit = !!document.getElementById("edit_profile");
+
+  function applyState() {
+    if (isEdit) {
+      userType.value = toggleSwitch.checked ? "driver&passenger" : initialUserType.value;
+      userTypeLabel.textContent = userType.value;
+    } else {
+      userType.value = toggleSwitch.checked ? "driver" : "passenger";
+      userTypeLabel.textContent = userType.value;
+    }
   }
 
-  toggleSwitch.addEventListener("change", function () {
-    if (toggleSwitch.checked) {
-      hiddenInput.value = "driver";
-      userTypeLabel.textContent = "driver";
-    } else {
-      hiddenInput.value = "passenger";
-      userTypeLabel.textContent = "passenger";
-    }
-  });
+  applyState(); // Ejecuta al cargar
+  toggleSwitch.addEventListener("change", applyState); // Ejecuta al cambiar
 });

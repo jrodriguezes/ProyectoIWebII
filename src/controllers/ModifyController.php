@@ -21,6 +21,10 @@ switch ($action) {
     case "cancel_reservation";
         include __DIR__ . "/actions/modifyCancelReservation.php";       
         break;  
+        break;
+    case "modify_user";
+        include __DIR__ . "/actions/modifyUser.php";
+        break;
 }
 
 ?>
