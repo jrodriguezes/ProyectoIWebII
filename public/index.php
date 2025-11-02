@@ -53,6 +53,10 @@ switch ($uri) {
     require_once __DIR__ . '/../src/controllers/LogoutController.php';
     break;
 
+  case 'edit-profile':
+    render('edit-profile');
+    break;
+
   default:
     http_response_code(404);
     echo "<h1 class='text-center mt-10 text-3xl font-bold text-red-600'>404 - Página no encontrada</h1>";

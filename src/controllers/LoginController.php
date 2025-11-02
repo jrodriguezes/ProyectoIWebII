@@ -7,7 +7,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit();
 }
 
-$email    = trim($_POST['floating_email'] ?? '');
+$email = trim($_POST['floating_email'] ?? '');
 $password = $_POST['floating_password'] ?? '';
 
 $user = findUserByEmail($email);
@@ -28,10 +28,13 @@ if (!password_verify($password, $user['password'])) {
 }
 
 $_SESSION['user'] = [
-    'id'         => $user['id'],
+    'id' => $user['id'],
     'first_name' => $user['first_name'],
-    'user_type'  => $user['user_type'],
-    'email'      => $user['email'],
+    'last_name' => $user['last_name'],
+    'birth_date' => $user['birth_date'],
+    'phone_number' => $user['phone_number'],
+    'user_type' => $user['user_type'],
+    'email' => $user['email'],
     'profile_photo' => $user['profile_photo'],
 ];
 
