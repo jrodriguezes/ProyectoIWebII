@@ -28,9 +28,9 @@ function getRidesByDriver($driverId)
 
     $conn = getConnection();
 
-    $sql = "SELECT id, driver_id, vehicle_plate, name, origin, destination, days, departure_time, price_per_seat, seats_offered
+    $sql = "SELECT id, driver_id, vehicle_plate, name, origin, destination, departure_date, price_per_seat, seats_offered
                 FROM rides
-                WHERE driver_id = '$driverId'";
+                WHERE driver_id = '$driverId' and status = 'active'";
 
     $result = $conn->query($sql);
 

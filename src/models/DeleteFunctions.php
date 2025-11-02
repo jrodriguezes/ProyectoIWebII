@@ -11,21 +11,23 @@ function deleteVehicle($plate_id, $driver_id)
     } else {
         return false;
     }
+
     $conn->close();
 
 }
 
-function deleteRide($ride_id)
+function deleteRide($ride_id, $driver_id)
 {
     $conn = getConnection();
 
-    $sql = "DELETE FROM rides where id = '$ride_id'";
+    $sql = "UPDATE rides set status = 'cancelled' where id = '$ride_id' AND driver_id = '$driver_id'";
 
     if ($conn->query($sql) === TRUE) {
         return true;
     } else {
         return false;
     }
+
     $conn->close();
 
 }

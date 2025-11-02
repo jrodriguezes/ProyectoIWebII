@@ -33,12 +33,12 @@ function insertVehicle($plate_id, $color, $brand, $model, $year, $seats, $vehicl
     $conn->close();
 }
 
-function insertRide($driver_id, $vehicle_plate, $name, $origin, $destination, $days, $departure_time, $price_per_seat, $seats_offered)
+function insertRide($driver_id, $vehicle_plate, $name, $origin, $destination, $departure_date, $price_per_seat, $seats_offered)
 {
     $conn = getConnection();
 
-    $sql = "INSERT INTO rides (driver_id, vehicle_plate, name, origin, destination, days, departure_time, price_per_seat, seats_offered)
-            VALUES ('$driver_id', '$vehicle_plate', '$name', '$origin', '$destination', '$days', '$departure_time', '$price_per_seat', '$seats_offered')";
+    $sql = "INSERT INTO rides (driver_id, vehicle_plate, name, origin, destination, departure_date, price_per_seat, seats_offered)
+            VALUES ('$driver_id', '$vehicle_plate', '$name', '$origin', '$destination', '$departure_date', '$price_per_seat', '$seats_offered')";
 
     if ($conn->query($sql) === TRUE) {
         $conn->close();

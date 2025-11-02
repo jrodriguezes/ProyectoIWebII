@@ -137,41 +137,13 @@ $searchRides = getAllRides();
                                     <option value="monterrey">Monterrey</option>
                                 </select>
                             </div>
-                            <div class="col-span-2">
-                                <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Days</label>
-                                <div>
-                                    <label for="monday">Monday</label>
-                                    <input type="checkbox" id="monday" name="monday" value="Mo" class="accent-black">
-
-                                    <label for="tuesday">Tuesday</label>
-                                    <input type="checkbox" id="tuesday" name="tuesday" value="Tu" class="accent-black">
-
-                                    <label for="wednesday">Wednesday</label>
-                                    <input type="checkbox" id="wednesday" name="wednesday" value="We"
-                                        class="accent-black">
-
-                                    <label for="thursday">Thursday</label>
-                                    <input type="checkbox" id="thursday" name="thursday" value="Th"
-                                        class="accent-black">
-
-                                    <label for="friday">Friday</label>
-                                    <input type="checkbox" id="friday" name="friday" value="Fr" class="accent-black">
-
-                                    <label for="saturday">Saturday</label>
-                                    <input type="checkbox" id="saturday" name="saturday" value="Sa"
-                                        class="accent-black">
-
-                                    <label for="sunday">Sunday</label>
-                                    <input type="checkbox" id="sunday" name="sunday" value="Su" class="accent-black">
-
-                                </div>
-                            </div>
+                            
 
                             <div class="col-span-2">
                                 <label for="departure_time"
                                     class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Departure
                                     time</label>
-                                <input type="time" name="departure_time" id="departure_time"
+                                <input type="datetime-local" name="departure_date" id="departure_date"
                                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                     required="">
                             </div>
@@ -216,7 +188,7 @@ $searchRides = getAllRides();
                     <th class="px-3 py-2 whitespace-nowrap">Departure place</th>
                     <th class="px-3 py-2 whitespace-nowrap">Arrive place</th>
                     <th class="px-3 py-2 whitespace-nowrap">Date</th>
-                    <TH class="px-3 py-2 whitespace-nowrap">Time</TH>
+                   
                     <th class="px-3 py-2 whitespace-nowrap">Price per seat</th>
                     <th class="px-3 py-2 whitespace-nowrap">Seats</th>
                     <th class="px-3 py-2 whitespace-nowrap">Modify</th>
@@ -249,35 +221,8 @@ $searchRides = getAllRides();
                             <?= htmlspecialchars($ride['destination']) ?>
                         </td>
                         <td class="px-3 py-2 whitespace-nowrap">
-                            <?php
-                            $daysString = "";
-
-                            if (strpos($ride['days'], 'Mo') !== false) {
-                                $daysString .= "Monday, ";
-                            }
-                            if (strpos($ride['days'], 'Tu') !== false) {
-                                $daysString .= "Tuesday, ";
-                            }
-                            if (strpos($ride['days'], 'We') !== false) {
-                                $daysString .= "Wednesday, ";
-                            }
-                            if (strpos($ride['days'], 'Th') !== false) {
-                                $daysString .= "Thursday, ";
-                            }
-                            if (strpos($ride['days'], 'Fr') !== false) {
-                                $daysString .= "Friday, ";
-                            }
-                            if (strpos($ride['days'], 'Sa') !== false) {
-                                $daysString .= "Saturday, ";
-                            }
-                            if (strpos($ride['days'], 'Su') !== false) {
-                                $daysString .= "Sunday, ";
-                            }
-                            ?>
-                            <?= htmlspecialchars($daysString) ?>
-                        </td>
-                        <td class="px-3 py-2 whitespace-nowrap">
-                            <?= htmlspecialchars($ride['departure_time']) ?>
+                            
+                            <?= htmlspecialchars(date('Y-m-d H:i', strtotime($ride['departure_date']))) ?>
                         </td>
                         <td class="px-3 py-2 whitespace-nowrap">
                             <?= htmlspecialchars('$' . number_format($ride['price_per_seat'], 2)) ?>
@@ -376,44 +321,7 @@ $searchRides = getAllRides();
                                             </div>
 
                                             <!-- Days -->
-                                            <div class="col-span-2">
-                                                <label
-                                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Days</label>
-                                                <div class="flex flex-wrap gap-4">
-                                                    <?php
-                                                    // si en DB guardas "Mo Tu We", marcamos con strpos
-                                                    $has = fn($abbr) => (strpos($ride['days'], $abbr) !== false) ? 'checked' : '';
-                                                    ?>
-                                                    <label class="flex items-center gap-2">
-                                                        <input type="checkbox" class="accent-black" name="monday" value="Mo"
-                                                            <?= $has('Mo') ?>> Monday
-                                                    </label>
-                                                    <label class="flex items-center gap-2">
-                                                        <input type="checkbox" class="accent-black" name="tuesday"
-                                                            value="Tu" <?= $has('Tu') ?>> Tuesday
-                                                    </label>
-                                                    <label class="flex items-center gap-2">
-                                                        <input type="checkbox" class="accent-black" name="wednesday"
-                                                            value="We" <?= $has('We') ?>> Wednesday
-                                                    </label>
-                                                    <label class="flex items-center gap-2">
-                                                        <input type="checkbox" class="accent-black" name="thursday"
-                                                            value="Th" <?= $has('Th') ?>> Thursday
-                                                    </label>
-                                                    <label class="flex items-center gap-2">
-                                                        <input type="checkbox" class="accent-black" name="friday" value="Fr"
-                                                            <?= $has('Fr') ?>> Friday
-                                                    </label>
-                                                    <label class="flex items-center gap-2">
-                                                        <input type="checkbox" class="accent-black" name="saturday"
-                                                            value="Sa" <?= $has('Sa') ?>> Saturday
-                                                    </label>
-                                                    <label class="flex items-center gap-2">
-                                                        <input type="checkbox" class="accent-black" name="sunday" value="Su"
-                                                            <?= $has('Su') ?>> Sunday
-                                                    </label>
-                                                </div>
-                                            </div>
+                                           
 
                                             <!-- Departure time -->
                                             <div class="col-span-2">
@@ -421,8 +329,8 @@ $searchRides = getAllRides();
                                                     class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                                                     Departure time
                                                 </label>
-                                                <input type="time" name="departure_time" id="departure_time"
-                                                    value="<?= htmlspecialchars(substr($ride['departure_time'], 0, 5)) /* HH:MM */ ?>"
+                                                <input type="datetime-local" name="departure_date" id="departure_date"
+                                                    value="<?= htmlspecialchars($ride['departure_date'], 0, 5) /* HH:MM */ ?>"
                                                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                                     required>
                                             </div>
@@ -483,7 +391,8 @@ $searchRides = getAllRides();
                                         <button data-modal-toggle="<?= $did ?>" class="p-2">✕</button>
                                     </div>
 
-                                    <form action="/post/ride_delete.php" method="POST">
+                                    <form action="/post/delete.php" method="POST">
+                                        <input type="hidden" name="action" value="delete_ride">
                                         <input type="hidden" name="ride_id" value="<?= $uid ?>">
                                         <p class="mb-4">Are you sure you want to delete this ride?</p>
                                         <button class="bg-red-600 text-white px-4 py-2 rounded">Confirm delete</button>

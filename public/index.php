@@ -53,6 +53,10 @@ switch ($uri) {
     require_once __DIR__ . '/../src/controllers/LogoutController.php';
     break;
 
+  case 'booking':
+    render('booking');
+    break;  
+
   case 'edit-profile':
     render('edit-profile');
     break;

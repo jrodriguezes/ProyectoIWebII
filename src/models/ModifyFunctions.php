@@ -27,7 +27,7 @@ function modifyVehicle($plate_id, $color, $brand, $model, $year, $seats, $vehicl
     $conn->close();
 }
 
-function uptateRide($ride_id, $name, $origin, $destination, $days, $departure_time, $price_per_seat, $seats_offered)
+function uptateRide($ride_id, $name, $origin, $destination, $departure_date, $price_per_seat, $seats_offered)
 {
     $conn = getConnection();
 
@@ -35,8 +35,7 @@ function uptateRide($ride_id, $name, $origin, $destination, $days, $departure_ti
                 name = '$name',
                 origin = '$origin',
                 destination = '$destination',
-                days = '$days',
-                departure_time = '$departure_time',
+                departure_date = '$departure_date',
                 price_per_seat = '$price_per_seat',
                 seats_offered = '$seats_offered'
             WHERE id = '$ride_id'";
@@ -68,6 +67,57 @@ function updateProfile($user_id, $first_name, $last_name, $password, $phone_numb
         return true;
     } else {
         return 'Error: ' . $conn->error;
+    }
+
+    $conn->close();
+}
+
+
+function acceptResevations ($reservation_id){
+
+    $conn = getConnection();
+
+    $sql = "UPDATE reservations SET
+                status = 'accepted'
+            WHERE id = '$reservation_id'";
+
+    if($conn->query($sql) === TRUE) {
+        return true;
+    } else {
+        return 'Error: '. $conn->error;
+    }
+
+    $conn->close();
+}
+
+function rejectReservation ($reservation_id){
+    $conn = getConnection();
+
+    $sql = "UPDATE reservations SET
+                status = 'rejected'
+            WHERE id = '$reservation_id'";
+
+     if($conn->query($sql) === TRUE){
+        return true;
+     } else {
+        return 'Error: '. $conn->error;
+     }
+
+     $conn->close();
+}
+
+function cancelReservation ($reservation_id){
+
+    $conn = getConnection();
+
+    $sql = "UPDATE reservations SET
+                status = 'cancelled'
+            WHERE id = '$reservation_id'";
+
+    if ($conn->query($sql) === TRUE){
+        return true;
+    } else {
+        return 'Error: '. $conn->error;
     }
 
     $conn->close();
