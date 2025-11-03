@@ -881,13 +881,14 @@ $searchRides = getAllRides();
                         $mid = "select-ride-$uid"
                             ?>
                         <tr class="text-center align-middle justify-center">
+                            <td><?= $ride["plate_id"] ?></td>
                             <td><?= $ride["model"] ?></td>
                             <td><?= $ride["year"] ?></td>
                             <td><?= $ride["brand"] ?></td>
                             <td><?= $ride["seats_offered"] ?></td>
                             <td><?= $ride["price_per_seat"] ?></td>
-                            <td><?= $ride["days"] ?></td>
-                            <td><?= $ride["departure_time"] ?></td>
+                            
+                            <td><?= $ride["departure_date"] ?></td>
                             <td><?= $ride["origin"] ?></td>
                             <td><?= $ride["destination"] ?></td>
                             <td id="<?= $mid ?>"> <button data-modal-target="confirm-ride" data-modal-toggle="confirm-ride"

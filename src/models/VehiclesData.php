@@ -47,16 +47,48 @@ function getRidesByDriver($driverId)
 
 function getAllRides()
 {
-
     $conn = getConnection();
 
-    $sql = "SELECT v.plate_id ,v.model, v.year, v.brand,r.seats_offered, r.price_per_seat, r.days, r.departure_time, r.origin, r.destination FROM rides as r
-    left join vehicles as v on r.vehicle_plate = v.plate_id where r.status = 'active'";
+    $sql = "
+        SELECT
+            r.id,
+            r.name               AS ride_name,
+            r.origin,
+            r.destination,
+            r.departure_date,
+            r.price_per_seat,
+            r.seats_offered,
+            r.status             AS ride_status,
+
+            -- conductor
+            u.id                 AS driver_id,
+            u.first_name,
+            u.last_name,
+            u.email,
+            u.phone_number,
+            u.profile_photo,
+
+            -- vehículo
+            v.plate_id,
+            v.brand,
+            v.model,
+            v.year,
+            v.color,
+            v.seats              AS vehicle_seats,
+            v.vehicle_picture
+
+        FROM rides AS r
+        INNER JOIN users AS u
+            ON r.driver_id = u.id
+        LEFT JOIN vehicles AS v
+            ON r.vehicle_plate = v.plate_id
+        WHERE r.status = 'active'
+    ";
 
     $result = $conn->query($sql);
 
     $rides = [];
-    if ($result->num_rows > 0) {
+    if ($result && $result->num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
             $rides[] = $row;
         }
@@ -65,5 +97,6 @@ function getAllRides()
     $conn->close();
     return $rides;
 }
+
 
 ?>
