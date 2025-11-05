@@ -18,6 +18,4 @@ function findUserByEmail(string $email)
     }
 
 }
-
-
 ?>

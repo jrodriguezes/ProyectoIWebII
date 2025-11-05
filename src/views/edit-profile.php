@@ -18,7 +18,7 @@ $phone_number = $user['phone_number'];
             class="w-32 h-32 rounded-full object-cover border border-gray-300 dark:border-gray-600 shadow">
     </div>
     <div>
-        <form action="/post/modify.php" method="POST" class="max-w-xl mx-auto" id="edit_profile"
+        <form action="/post/proxy.php" method="POST" class="max-w-xl mx-auto" id="edit_profile"
             enctype="multipart/form-data">
             <input type="hidden" name="action" value="modify_user">
             <div class="text-center">

@@ -40,3 +40,4 @@ $_SESSION['user'] = [
 
 header('Location: /home');
 exit();
+?>
