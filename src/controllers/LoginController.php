@@ -38,5 +38,10 @@ $_SESSION['user'] = [
     'profile_photo' => $user['profile_photo'],
 ];
 
-header('Location: /home');
-exit();
+if ($user['user_type'] === 'admin') {
+    header('Location: /home_admin');
+    exit();
+} else {
+    header('Location: /home');
+    exit();
+}
