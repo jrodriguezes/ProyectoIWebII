@@ -1,16 +1,12 @@
 <?php
 
 require_once __DIR__ . '/../config/session.php';
-require_once __DIR__ . '/../models/ReservationsData.php';
+require_once __DIR__ . '/../models/ReservationModel.php';
 
 $user = $_SESSION['user'];
-
-
-
 ?>
 
 <div class="min-h-full w-full">
-
     <div>
         <?php include __DIR__ . "/layouts/navbar.php" ?>
     </div>
@@ -67,7 +63,7 @@ $user = $_SESSION['user'];
                         <?php if ($reservation['status'] === 'pending'): ?>
                         <div class="flex justify-center items-center space-x-2">
                             <!-- ✅ Accept -->
-                            <form method="POST" action="/post/modify.php">
+                            <form method="POST" action="/post/proxy.php">
                                 <input type="hidden" name="reservation_id"
                                     value="<?= htmlspecialchars($reservation['reservation_id']) ?>">
                                 <input type="hidden" name="action" value="accept_reservation">
@@ -84,7 +80,7 @@ $user = $_SESSION['user'];
                             </form>
 
                             <!-- ❌ Reject -->
-                            <form method="POST" action="/post/modify.php">
+                            <form method="POST" action="/post/proxy.php">
                                 <input type="hidden" name="reservation_id"
                                     value="<?= htmlspecialchars($reservation['reservation_id']) ?>">
                                 <input type="hidden" name="action" value="reject_reservation">
@@ -101,7 +97,7 @@ $user = $_SESSION['user'];
                             </form>
 
                             <!-- 🗑 Delete -->
-                            <form method="POST" action="/post/modify.php">
+                            <form method="POST" action="/post/proxy.php">
                                 <input type="hidden" name="reservation_id"
                                     value="<?= htmlspecialchars($reservation['reservation_id']) ?>">
                                 <input type="hidden" name="action" value="cancel_reservation">
@@ -164,7 +160,7 @@ $user = $_SESSION['user'];
 
                     <td class="w-[160px] max-w-[160px] text-center whitespace-nowrap overflow-hidden">
                         <?php if ($reservation['status'] === 'pending' || $reservation['status'] === 'accepted'): ?>
-                        <form method="POST" action="/post/modify.php" class="flex justify-center items-center">
+                        <form method="POST" action="/post/proxyController.php" class="flex justify-center items-center">
                             <input type="hidden" name="reservation_id"
                                 value="<?= htmlspecialchars($reservation['reservation_id']) ?>">
                             <input type="hidden" name="action" value="cancel_reservation">

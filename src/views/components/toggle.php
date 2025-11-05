@@ -1,6 +1,6 @@
 <?php
-$user = $_SESSION['user'];
-$user_type = $user['user_type'];
+$user = $_SESSION['user'] ?? null;
+$user_type = $user['user_type'] ?? null;
 ?>
 <?php if (!empty($user)): ?>
     <div>

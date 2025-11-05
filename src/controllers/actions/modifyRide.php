@@ -13,7 +13,7 @@ $price_per_seat = (float) $_POST['price_per_seat'];
 $seats_offered = (int) $_POST['seats_offered'];
 
 
-$result = uptateRide(
+$result = updateRide(
     $ride_id,
     $name,
     $origin,

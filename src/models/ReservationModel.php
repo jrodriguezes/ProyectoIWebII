@@ -1,6 +1,61 @@
 <?php
 
 require_once __DIR__ . '/../config/db.php';
+
+
+function acceptResevations($reservation_id)
+{
+
+    $conn = getConnection();
+
+    $sql = "UPDATE reservations SET
+                status = 'accepted'
+            WHERE id = '$reservation_id'";
+
+    if ($conn->query($sql) === TRUE) {
+        return true;
+    } else {
+        return 'Error: ' . $conn->error;
+    }
+
+    $conn->close();
+}
+
+function rejectReservation($reservation_id)
+{
+    $conn = getConnection();
+
+    $sql = "UPDATE reservations SET
+                status = 'rejected'
+            WHERE id = '$reservation_id'";
+
+    if ($conn->query($sql) === TRUE) {
+        return true;
+    } else {
+        return 'Error: ' . $conn->error;
+    }
+
+    $conn->close();
+}
+
+function cancelReservation($reservation_id)
+{
+
+    $conn = getConnection();
+
+    $sql = "UPDATE reservations SET
+                status = 'cancelled'
+            WHERE id = '$reservation_id'";
+
+    if ($conn->query($sql) === TRUE) {
+        return true;
+    } else {
+        return 'Error: ' . $conn->error;
+    }
+
+    $conn->close();
+}
+
 function getReservationsByDriver($driverId)
 {
     $conn = getConnection();
@@ -81,5 +136,4 @@ function getReservationsByPassenger($passengerId)
     $conn->close();
     return $reservations;
 }
-
 ?>
