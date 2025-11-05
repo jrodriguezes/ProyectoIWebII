@@ -61,6 +61,10 @@ switch ($uri) {
     render('edit-profile');
     break;
 
+  case 'home_admin':
+    render('home_admin');
+    break;
+
   default:
     http_response_code(404);
     echo "<h1 class='text-center mt-10 text-3xl font-bold text-red-600'>404 - Página no encontrada</h1>";
