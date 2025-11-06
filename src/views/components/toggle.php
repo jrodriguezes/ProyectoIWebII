@@ -11,7 +11,7 @@ $user_type = $user['user_type'] ?? null;
             for="userTypeSwitch"><?= $user_type ?></label>
 
         <input type="hidden" name="initial_user_type" id="initial_user_type" value="<?= $user_type ?>">
-        <input type="hidden" name="user-type" id="user-type" value="<?php $user_type ?>">
+        <input type="hidden" name="user_type" id="user_type" value="<?= $user_type ?>">
     </div>
 <?php else: ?>
     <div>
@@ -21,6 +21,6 @@ $user_type = $user['user_type'] ?? null;
         <label id="userTypeLabel" class="inline-block ps-[0.15rem] hover:cursor-pointer"
             for="userTypeSwitch">Passenger</label>
 
-        <input type="hidden" name="user_type" id="user-type" value="passenger">
+        <input type="hidden" name="user_type" id="user_type" value="passenger">
     </div>
 <?php endif; ?>
