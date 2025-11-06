@@ -879,8 +879,6 @@ $searchRides = getAllRides();
                             $uid = htmlspecialchars($ride['plate_id']);
                             $mid = "select-ride-$uid"
                                 ?>
-
-
                             <tr class="text-center align-middle justify-center">
                                 <td><?= $ride["plate_id"] ?></td>
                                 <td><?= $ride["model"] ?></td>
@@ -889,9 +887,11 @@ $searchRides = getAllRides();
                                 <td><?= $ride["seats_offered"] ?></td>
                                 <td><?= $ride["price_per_seat"] ?></td>
 
-                                <td><?= $ride["departure_date"] ?></td>
-                                <td><?= $ride["origin"] ?></td>
-                                <td><?= $ride["destination"] ?></td>
+                                <td><?= htmlspecialchars(date('Y-m-d', strtotime($ride['departure_date']))) ?></td>
+                                <td><?= htmlspecialchars(date('H:i', strtotime($ride['departure_date']))) ?></td>
+                                <td><?= htmlspecialchars($ride["origin"]) ?></td>
+                                <td><?= htmlspecialchars($ride["destination"]) ?></td>
+
                                 <td id="<?= $mid ?>"> <button data-modal-target="confirm-ride" data-modal-toggle="confirm-ride"
                                         class="inline-flex items-center rounded-lg bg-green-600 px-5 py-2.5 text-xs font-medium uppercase leading-normal text-white shadow transition hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 active:bg-green-700">
                                         Book ride
