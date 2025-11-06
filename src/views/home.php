@@ -1,7 +1,7 @@
 <?php
 require_once __DIR__ . '/../config/session.php';
 require_once __DIR__ . '/../models/VehicleModel.php';
-
+require_once __DIR__ . '/../models/RideModel.php';
 require_once __DIR__ . '/../common/auth_guard.php';
 
 $user = $_SESSION['user'];
@@ -879,6 +879,8 @@ $searchRides = getAllRides();
                             $uid = htmlspecialchars($ride['plate_id']);
                             $mid = "select-ride-$uid"
                                 ?>
+
+
                             <tr class="text-center align-middle justify-center">
                                 <td><?= $ride["plate_id"] ?></td>
                                 <td><?= $ride["model"] ?></td>
@@ -904,7 +906,10 @@ $searchRides = getAllRides();
                                             </div>
 
                                             <form action="/post/proxy.php" method="POST">
-                                                <input type="hidden" name="ride_id" value="<?= $uid ?>">
+                                                <!-- <input type="hidden" name="ride_id" value="<?= $uid ?>"> -->
+                                                <input type="hidden" value="<?= $ride['id'] ?>" name="ride_id">
+                                                <input type="hidden" value="book_ride" name="action">
+                                                <input type="hidden" name="user_id" value="<?= $user['id'] ?>">
                                                 <p class="mb-4">Are you sure you want to afiliate with this ride?</p>
                                                 <button
                                                     class="bg-blue-700 hover:bg-blue-800 text-white px-4 py-2 rounded">Confirm

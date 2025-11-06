@@ -16,7 +16,11 @@ switch ($action) {
     case "delete_ride":
         include __DIR__ . "/actions/deleteRide.php";
         break;
-        
+
+    case "book_ride":
+        include __DIR__ . "/actions/bookRide.php";
+        break;
+
     default:
         http_response_code(400);
         exit("Unknown insert action");

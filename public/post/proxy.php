@@ -9,18 +9,13 @@ if (!$action) {
 // Ej.: register_user, modify_vehicle, delete_ride, modify_accept_reservation
 $parts = explode('_', $action);  // ['register','user'] o ['modify','accept','reservation']
 
-// Reservas tienen 3 partes (modify_accept_reservation, etc.)
-if (in_array('reservation', $parts, true)) {
-  require __DIR__ . '/../../src/controllers/ReservationController.php';
-  exit;
-}
-
 // Resto (user/vehicle/ride)
 $entity = $parts[1] ?? '';
 $map = [
   'user' => __DIR__ . '/../../src/controllers/UserController.php',
   'vehicle' => __DIR__ . '/../../src/controllers/VehicleController.php',
   'ride' => __DIR__ . '/../../src/controllers/RideController.php',
+  'reservation' => __DIR__ . '/../../src/controllers/ReservationController.php',
 ];
 
 if (!isset($map[$entity])) {

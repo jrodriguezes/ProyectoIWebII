@@ -54,4 +54,99 @@ function deleteRide($ride_id, $driver_id)
 
     $conn->close();
 }
+
+function getRidesByDriver($driverId)
+{
+
+    $conn = getConnection();
+
+    $sql = "SELECT id, driver_id, vehicle_plate, name, origin, destination, departure_date, price_per_seat, seats_offered
+                FROM rides
+                WHERE driver_id = '$driverId' and status = 'active'";
+
+    $result = $conn->query($sql);
+
+    $rides = [];
+    if ($result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $rides[] = $row;
+        }
+    }
+
+    $conn->close();
+    return $rides;
+}
+function getAllRides()
+{
+    $conn = getConnection();
+
+    $sql = "
+        SELECT
+            r.id,
+            r.name               AS ride_name,
+            r.origin,
+            r.destination,
+            r.departure_date,
+            r.price_per_seat,
+            r.seats_offered,
+            r.status             AS ride_status,
+
+            -- Conductor
+            u.id                 AS driver_id,
+            u.first_name,
+            u.last_name,
+            u.email,
+            u.phone_number,
+            u.profile_photo,
+
+            -- Vehículo
+            v.plate_id,
+            v.brand,
+            v.model,
+            v.year,
+            v.color,
+            v.seats              AS vehicle_seats,
+            v.vehicle_picture
+
+        FROM rides AS r
+        INNER JOIN users AS u
+            ON r.driver_id = u.id
+        LEFT JOIN vehicles AS v
+            ON r.vehicle_plate = v.plate_id
+        WHERE r.status = 'active'
+        ORDER BY r.departure_date DESC  -- 👈 del más reciente al más antiguo
+    ";
+
+    $result = $conn->query($sql);
+
+    $rides = [];
+    if ($result && $result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $rides[] = $row;
+        }
+    }
+
+    $conn->close();
+    return $rides;
+}
+
+
+function bookRide($id, $ride_id, $passenger_id, $status)
+{
+    $conn = getConnection();
+
+    $sql = "INSERT INTO reservations (id, ride_id, passenger_id, status, created_at, updated_at)
+            VALUES ('$id','$ride_id', '$passenger_id', '$status', NOW(), NOW())";
+
+    if ($conn->query($sql) === TRUE) {
+        $conn->close();
+        return true;
+    } else {
+        $error = 'Error: ' . $conn->error;
+        $conn->close();
+        return $error;
+    }
+}
+
+
 ?>
