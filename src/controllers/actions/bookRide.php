@@ -2,7 +2,7 @@
 $id = random_int(1, 99999);
 $ride_id = $_POST['ride_id'];
 $passenger_id = $_POST['user_id'];
-$status = 'pendient';
+$status = 'pending';
 
 $result = bookRide(
     $id,
