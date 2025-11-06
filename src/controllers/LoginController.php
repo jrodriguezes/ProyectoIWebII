@@ -39,7 +39,7 @@ $_SESSION['user'] = [
 ];
 
 if ($user['user_type'] === 'admin') {
-    header('Location: /home_admin');
+    header('Location: /home');
     exit();
 } else {
     header('Location: /home');

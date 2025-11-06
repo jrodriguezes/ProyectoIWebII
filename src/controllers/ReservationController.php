@@ -7,15 +7,15 @@ $action = $_POST["action"] ?? null;
 switch ($action) {
 
     case "accept_reservation";
-        include __DIR__ . "/actions/modifyAcceptReservation.php";
+        include __DIR__ . "/actions/AcceptReservation.php";
         break;
 
     case "reject_reservation";
-        include __DIR__ . "/actions/modifyRejectReservation.php";
+        include __DIR__ . "/actions/RejectReservation.php";
         break;
 
     case "cancel_reservation";
-        include __DIR__ . "/actions/modifyCancelReservation.php";
+        include __DIR__ . "/actions/CancelReservation.php";
         break;
 
     default:

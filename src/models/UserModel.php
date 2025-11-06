@@ -74,5 +74,37 @@ function getUsers() {
     return $users;
 }
 
+function deleteUser ($id) {
+    $conn = getConnection();
+
+    $sql = "UPDATE users 
+                set status = 'inactive'
+                where id = $id";
+
+    if ($conn->query($sql) === TRUE) {
+        return true;
+    } else {
+        return 'Error: ' . $conn->error;
+    }
+
+    $conn->close();            
+}
+
+function activeUser ($id) {
+    $conn = getConnection();
+
+    $sql = "UPDATE users 
+                set status = 'active'
+                where id = $id";
+
+    if ($conn->query($sql) === TRUE) {
+        return true;
+    } else {
+        return 'Error: ' . $conn->error;
+    }
+
+    $conn->close();            
+}
+
 
 ?>

@@ -15,7 +15,12 @@ switch ($action) {
     case "modify_user";
         include __DIR__ . "/actions/modifyUser.php";
         break;
-
+    case "delete_user"; 
+        include __DIR__ . "/actions/deleteUser.php";
+        break;
+    case "active_user";
+        include __DIR__ . "/actions/activeUser.php";
+        break;
     default:
         http_response_code(400);
         exit("Unknown insert action");
