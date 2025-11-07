@@ -1,5 +1,5 @@
-<div class="form-container bg-white dark:bg-gray-800 shadow-lg p-8 w-full ">
-    <form action="/post/proxy.php" method="POST" class="max-w-xl mx-auto" id="registerForm"
+<div class="flex items-center justify-center w-full">
+    <form action="/post/proxy.php" method="POST" class="w-full max-w-xl" id="registerForm"
         enctype="multipart/form-data">
         <input type="hidden" name="action" value="register_user">
         <div class="flex items-center">

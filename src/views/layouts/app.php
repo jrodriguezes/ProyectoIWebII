@@ -27,7 +27,7 @@
   require_once __DIR__ . '/../../config/session.php';
   $user = $_SESSION['user'] ?? null;
   ?>
-  <main class="flex-1">
+  <main class="flex-1 grid place-items-center">
     <?= $content ?>
   </main>
 
