@@ -8,21 +8,20 @@ $profile_photo = $user['profile_photo'];
 $birth_date = $user['birth_date'];
 $phone_number = $user['phone_number'];
 ?>
-<div class="">
+<div class="min-h-full w-full flex flex-col">
     <div>
         <?php include __DIR__ . "/layouts/navbar.php" ?>
     </div>
 
-    <div class="relative z-0 w-full mb-5 group">
-        <img src="<?= $profile_photo ?>" alt=""
-            class="w-32 h-32 rounded-full object-cover border border-gray-300 dark:border-gray-600 shadow">
-    </div>
-    <div>
-        <form action="/post/proxy.php" method="POST" class="max-w-xl mx-auto" id="edit_profile"
+    <div class="flex-grow flex justify-center items-center">
+        <form action="/post/proxy.php" method="POST" class="w-full max-w-xl" id="edit_profile"
             enctype="multipart/form-data">
             <input type="hidden" name="action" value="modify_user">
             <div class="text-center">
-                <h1>Public profile</h1>
+                <div class="flex relative z-0 w-full mb-5 group justify-center">
+                    <img src="<?= $profile_photo ?>" alt=""
+                        class="w-32 h-32 rounded-full object-cover border border-gray-300 dark:border-gray-600 shadow">
+                </div>
                 <div class="flex items-center justify-center">
                     <div><?php include COMP_PATH . '/theme-toggle.php'; ?></div>
                     <div class="h-8"><?php include COMP_PATH . '/toggle.php'; ?></div>
