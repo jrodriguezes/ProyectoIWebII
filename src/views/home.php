@@ -4,11 +4,13 @@ require_once __DIR__ . '/../models/VehicleModel.php';
 require_once __DIR__ . '/../models/RideModel.php';
 require_once __DIR__ . '/../common/auth_guard.php';
 require_once __DIR__ . '/../models/UserModel.php';
+require_once __DIR__ . '/../models/ReservationModel.php';
 
 $user = $_SESSION['user'];
 $vehicles = getVehicles($user['id']);
 $rides = getRidesByDriver($user['id']);
 $searchRides = getAllRides();
+$reservations = getReservationsByPassenger($user['id']);
 ?>
 
 <div class="min-h-full w-full">
@@ -194,212 +196,217 @@ $searchRides = getAllRides();
                         <th class="px-3 py-2 whitespace-nowrap">Delete</th>
                     </tr>
                 </thead>
-
                 <tbody class="divide-y divide-gray-200 dark:divide-gray-700 text-center">
-                    <?php foreach ($rides as $ride): ?>
-                        <?php
-                        $uid = htmlspecialchars($ride['id']);//identificador único por fila
-                        $mid = "ride-modify-modal-$uid";                   //id único del modal Modify
-                        $did = "ride-delete-modal-$uid";                   //id único del modal Delete
+                    <?php if (empty($rides)): ?>
+                        <tr class="*:text-gray-900 *:first:font-medium dark:*:text-white ">
+                            <td class="px-3 py-2 whitespace-nowrap">No vehicles have been registered yet.</td>
+                        </tr>
+                    <?php else: ?>
+                        <?php foreach ($rides as $ride): ?>
+                            <?php
+                            $uid = htmlspecialchars($ride['id']);//identificador único por fila
+                            $mid = "ride-modify-modal-$uid";                   //id único del modal Modify
+                            $did = "ride-delete-modal-$uid";                   //id único del modal Delete
                 
-                        ?>
-                        <tr class="*:text-gray-900 *:first:font-medium dark:*:text-white">
-                            <td class="px-3 py-2 whitespace-nowrap">
-                                <?= htmlspecialchars($ride['id']) ?>
-                            </td>
-                            <td class="px-3 py-2 whitespace-nowrap">
-                                <?= htmlspecialchars($ride['vehicle_plate']) ?>
-                            </td>
-                            <td class="px-3 py-2 whitespace-nowrap">
-                                <?= htmlspecialchars($ride['name']) ?>
-                            </td>
-                            <td class="px-3 py-2 whitespace-nowrap">
-                                <?= htmlspecialchars($ride['origin']) ?>
-                            </td>
-                            <td class="px-3 py-2 whitespace-nowrap">
-                                <?= htmlspecialchars($ride['destination']) ?>
-                            </td>
-                            <td class="px-3 py-2 whitespace-nowrap">
-                                <?= htmlspecialchars(date('Y-m-d H:i', strtotime($ride['departure_date']))) ?>
-                            </td>
-                            <td class="px-3 py-2 whitespace-nowrap">
-                                <?= htmlspecialchars('$' . number_format($ride['price_per_seat'], 2)) ?>
-                            </td>
-                            <td class="px-3 py-2 whitespace-nowrap">
-                                <?= htmlspecialchars($ride['seats_offered']) ?>
-                            </td>
-                            <td class="px-3 py-2 whitespace-nowrap">
-                                <button data-modal-target="<?= $mid ?>" data-modal-toggle="<?= $mid ?>"
-                                    class="rounded-lg bg-yellow-500 px-4 py-2 text-white">
-                                    Modify
-                                </button>
-                                <!-- Modal MODIFICAR -->
-                                <div id="<?= $mid ?>" aria-hidden="true"
-                                    class="hidden fixed inset-0 z-50 flex items-center justify-center">
-                                    <div class="bg-white dark:bg-gray-700 rounded-lg shadow p-4 w-full max-w-md">
-                                        <div class="flex items-center justify-between border-b pb-2 mb-4">
-                                            <h3 class="text-lg font-semibold">Modify ride #<?= $uid ?></h3>
-                                            <button data-modal-toggle="<?= $mid ?>" class="p-2">✕</button>
-                                        </div>
-
-                                        <form class="p-4 md:p-5" action="/post/proxy.php" method="POST">
-                                            <input type="hidden" name="action" value="modify_ride">
-                                            <input type="hidden" name="ride_id" value="<?= htmlspecialchars($ride['id']) ?>">
-
-                                            <div class="grid gap-4 mb-4 grid-cols-2">
-                                                <!-- Name -->
-                                                <div class="col-span-2">
-                                                    <label for="name"
-                                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Name</label>
-                                                    <input type="text" name="name" id="name"
-                                                        value="<?= htmlspecialchars($ride['name']) ?>"
-                                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                                        placeholder="Type ride name or some description" required>
-                                                </div>
-
-                                                <!-- Vehicle -->
-                                                <div class="col-span-2">
-                                                    <label for="vehicle_id"
-                                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Vehicle</label>
-                                                    <select id="vehicle_id" name="vehicle_id"
-                                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                                        required>
-                                                        <option value="" disabled>Select your vehicle</option>
-                                                        <?php
-                                                        $vehiclesList = getVehicles($user['id']);
-                                                        foreach ($vehiclesList as $vehicle):
-                                                            $plate = htmlspecialchars($vehicle['plate_id']);
-                                                            $label = htmlspecialchars($vehicle['brand'] . ' ' . $vehicle['model'] . ' (' . $vehicle['plate_id'] . ')');
-                                                            $selected = ($vehicle['plate_id'] === $ride['vehicle_plate']) ? 'selected' : '';
-                                                            ?>
-                                                            <option value="<?= $plate ?>" <?= $selected ?>><?= $label ?></option>
-                                                        <?php endforeach; ?>
-                                                    </select>
-                                                </div>
-
-                                                <!-- Origin (departure) -->
-                                                <div class="col-span-2 sm:col-span-1">
-                                                    <label for="origin"
-                                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                                                        Place departure (San Carlos)
-                                                    </label>
-                                                    <select id="origin" name="origin"
-                                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                                        required>
-                                                        <?php
-                                                        $places = ['ciudadquesada', 'florencia', 'quesada', 'pital', 'cutris', 'venecia', 'aguasarcas', 'pocosol', 'la_fortuna', 'palmera', 'venado', 'monterrey'];
-                                                        echo '<option value="" disabled>Select place of departure</option>';
-                                                        foreach ($places as $p) {
-                                                            $sel = ($ride['origin'] === $p) ? 'selected' : '';
-                                                            $text = ucwords(str_replace('_', ' ', $p));
-                                                            echo '<option value="' . htmlspecialchars($p) . '" ' . $sel . '>' . htmlspecialchars($text) . '</option>';
-                                                        }
-                                                        ?>
-                                                    </select>
-                                                </div>
-
-                                                <!-- Destination (arrival) -->
-                                                <div class="col-span-2 sm:col-span-1">
-                                                    <label for="destination"
-                                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                                                        Place arrival (San Carlos)
-                                                    </label>
-                                                    <select id="destination" name="destination"
-                                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                                        required>
-                                                        <?php
-                                                        echo '<option value="" disabled>Select place of arrival</option>';
-                                                        foreach ($places as $p) {
-                                                            $sel = ($ride['destination'] === $p) ? 'selected' : '';
-                                                            $text = ucwords(str_replace('_', ' ', $p));
-                                                            echo '<option value="' . htmlspecialchars($p) . '" ' . $sel . '>' . htmlspecialchars($text) . '</option>';
-                                                        }
-                                                        ?>
-                                                    </select>
-                                                </div>
-
-                                                <!-- Days -->
-
-
-                                                <!-- Departure time -->
-                                                <div class="col-span-2">
-                                                    <label for="departure_time"
-                                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                                                        Departure time
-                                                    </label>
-                                                    <input type="datetime-local" name="departure_date" id="departure_date"
-                                                        value="<?= htmlspecialchars($ride['departure_date'], 0, 5) /* HH:MM */ ?>"
-                                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                                        required>
-                                                </div>
-
-                                                <!-- Price per seat -->
-                                                <div class="col-span-2 sm:col-span-1">
-                                                    <label for="price_per_seat"
-                                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                                                        Price per seat
-                                                    </label>
-                                                    <input type="number" step="0.01" name="price_per_seat" id="price_per_seat"
-                                                        value="<?= htmlspecialchars($ride['price_per_seat']) ?>"
-                                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                                        placeholder="10.00" required>
-                                                </div>
-
-                                                <!-- Seats offered -->
-                                                <div class="col-span-2 sm:col-span-1">
-                                                    <label for="seats_offered"
-                                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                                                        Seats
-                                                    </label>
-                                                    <input type="number" name="seats_offered" id="seats_offered"
-                                                        value="<?= htmlspecialchars($ride['seats_offered']) ?>"
-                                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                                        placeholder="5" required>
-                                                </div>
+                            ?>
+                            <tr class="*:text-gray-900 *:first:font-medium dark:*:text-white">
+                                <td class="px-3 py-2 whitespace-nowrap">
+                                    <?= htmlspecialchars($ride['id']) ?>
+                                </td>
+                                <td class="px-3 py-2 whitespace-nowrap">
+                                    <?= htmlspecialchars($ride['vehicle_plate']) ?>
+                                </td>
+                                <td class="px-3 py-2 whitespace-nowrap">
+                                    <?= htmlspecialchars($ride['name']) ?>
+                                </td>
+                                <td class="px-3 py-2 whitespace-nowrap">
+                                    <?= htmlspecialchars($ride['origin']) ?>
+                                </td>
+                                <td class="px-3 py-2 whitespace-nowrap">
+                                    <?= htmlspecialchars($ride['destination']) ?>
+                                </td>
+                                <td class="px-3 py-2 whitespace-nowrap">
+                                    <?= htmlspecialchars(date('Y-m-d H:i', strtotime($ride['departure_date']))) ?>
+                                </td>
+                                <td class="px-3 py-2 whitespace-nowrap">
+                                    <?= htmlspecialchars('$' . number_format($ride['price_per_seat'], 2)) ?>
+                                </td>
+                                <td class="px-3 py-2 whitespace-nowrap">
+                                    <?= htmlspecialchars($ride['seats_offered']) ?>
+                                </td>
+                                <td class="px-3 py-2 whitespace-nowrap">
+                                    <button data-modal-target="<?= $mid ?>" data-modal-toggle="<?= $mid ?>"
+                                        class="rounded-lg bg-yellow-500 px-4 py-2 text-white">
+                                        Modify
+                                    </button>
+                                    <!-- Modal MODIFICAR -->
+                                    <div id="<?= $mid ?>" aria-hidden="true"
+                                        class="hidden fixed inset-0 z-50 flex items-center justify-center">
+                                        <div class="bg-white dark:bg-gray-700 rounded-lg shadow p-4 w-full max-w-md">
+                                            <div class="flex items-center justify-between border-b pb-2 mb-4">
+                                                <h3 class="text-lg font-semibold">Modify ride #<?= $uid ?></h3>
+                                                <button data-modal-toggle="<?= $mid ?>" class="p-2">✕</button>
                                             </div>
 
-                                            <button type="submit"
-                                                class="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                                                <svg class="me-1 -ms-1 w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
-                                                    xmlns="http://www.w3.org/2000/svg">
-                                                    <path fill-rule="evenodd"
-                                                        d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
-                                                        clip-rule="evenodd"></path>
-                                                </svg>
-                                                Save changes
-                                            </button>
-                                        </form>
+                                            <form class="p-4 md:p-5" action="/post/proxy.php" method="POST">
+                                                <input type="hidden" name="action" value="modify_ride">
+                                                <input type="hidden" name="ride_id" value="<?= htmlspecialchars($ride['id']) ?>">
 
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="px-3 py-2 whitespace-nowrap">
-                                <!-- Botón ELIMINAR -->
-                                <button data-modal-target="<?= $did ?>" data-modal-toggle="<?= $did ?>"
-                                    class="rounded-lg bg-red-600 px-4 py-2 text-white">
-                                    Delete
-                                </button>
+                                                <div class="grid gap-4 mb-4 grid-cols-2">
+                                                    <!-- Name -->
+                                                    <div class="col-span-2">
+                                                        <label for="name"
+                                                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Name</label>
+                                                        <input type="text" name="name" id="name"
+                                                            value="<?= htmlspecialchars($ride['name']) ?>"
+                                                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                                            placeholder="Type ride name or some description" required>
+                                                    </div>
 
-                                <!-- Modal ELIMINAR -->
-                                <div id="<?= $did ?>" aria-hidden="true"
-                                    class="hidden fixed inset-0 z-50 flex items-center justify-center">
-                                    <div class="bg-white dark:bg-gray-700 rounded-lg shadow p-4 w-full max-w-md">
-                                        <div class="flex items-center justify-between border-b pb-2 mb-4">
-                                            <h3 class="text-lg font-semibold">Delete ride #<?= $uid ?></h3>
-                                            <button data-modal-toggle="<?= $did ?>" class="p-2">✕</button>
+                                                    <!-- Vehicle -->
+                                                    <div class="col-span-2">
+                                                        <label for="vehicle_id"
+                                                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Vehicle</label>
+                                                        <select id="vehicle_id" name="vehicle_id"
+                                                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                                            required>
+                                                            <option value="" disabled>Select your vehicle</option>
+                                                            <?php
+                                                            $vehiclesList = getVehicles($user['id']);
+                                                            foreach ($vehiclesList as $vehicle):
+                                                                $plate = htmlspecialchars($vehicle['plate_id']);
+                                                                $label = htmlspecialchars($vehicle['brand'] . ' ' . $vehicle['model'] . ' (' . $vehicle['plate_id'] . ')');
+                                                                $selected = ($vehicle['plate_id'] === $ride['vehicle_plate']) ? 'selected' : '';
+                                                                ?>
+                                                                <option value="<?= $plate ?>" <?= $selected ?>><?= $label ?></option>
+                                                            <?php endforeach; ?>
+                                                        </select>
+                                                    </div>
+
+                                                    <!-- Origin (departure) -->
+                                                    <div class="col-span-2 sm:col-span-1">
+                                                        <label for="origin"
+                                                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                            Place departure (San Carlos)
+                                                        </label>
+                                                        <select id="origin" name="origin"
+                                                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                                            required>
+                                                            <?php
+                                                            $places = ['ciudadquesada', 'florencia', 'quesada', 'pital', 'cutris', 'venecia', 'aguasarcas', 'pocosol', 'la_fortuna', 'palmera', 'venado', 'monterrey'];
+                                                            echo '<option value="" disabled>Select place of departure</option>';
+                                                            foreach ($places as $p) {
+                                                                $sel = ($ride['origin'] === $p) ? 'selected' : '';
+                                                                $text = ucwords(str_replace('_', ' ', $p));
+                                                                echo '<option value="' . htmlspecialchars($p) . '" ' . $sel . '>' . htmlspecialchars($text) . '</option>';
+                                                            }
+                                                            ?>
+                                                        </select>
+                                                    </div>
+
+                                                    <!-- Destination (arrival) -->
+                                                    <div class="col-span-2 sm:col-span-1">
+                                                        <label for="destination"
+                                                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                            Place arrival (San Carlos)
+                                                        </label>
+                                                        <select id="destination" name="destination"
+                                                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                                            required>
+                                                            <?php
+                                                            echo '<option value="" disabled>Select place of arrival</option>';
+                                                            foreach ($places as $p) {
+                                                                $sel = ($ride['destination'] === $p) ? 'selected' : '';
+                                                                $text = ucwords(str_replace('_', ' ', $p));
+                                                                echo '<option value="' . htmlspecialchars($p) . '" ' . $sel . '>' . htmlspecialchars($text) . '</option>';
+                                                            }
+                                                            ?>
+                                                        </select>
+                                                    </div>
+
+                                                    <!-- Days -->
+
+
+                                                    <!-- Departure time -->
+                                                    <div class="col-span-2">
+                                                        <label for="departure_time"
+                                                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                            Departure time
+                                                        </label>
+                                                        <input type="datetime-local" name="departure_date" id="departure_date"
+                                                            value="<?= htmlspecialchars($ride['departure_date'], 0, 5) /* HH:MM */ ?>"
+                                                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                                            required>
+                                                    </div>
+
+                                                    <!-- Price per seat -->
+                                                    <div class="col-span-2 sm:col-span-1">
+                                                        <label for="price_per_seat"
+                                                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                            Price per seat
+                                                        </label>
+                                                        <input type="number" step="0.01" name="price_per_seat" id="price_per_seat"
+                                                            value="<?= htmlspecialchars($ride['price_per_seat']) ?>"
+                                                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                                            placeholder="10.00" required>
+                                                    </div>
+
+                                                    <!-- Seats offered -->
+                                                    <div class="col-span-2 sm:col-span-1">
+                                                        <label for="seats_offered"
+                                                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                            Seats
+                                                        </label>
+                                                        <input type="number" name="seats_offered" id="seats_offered"
+                                                            value="<?= htmlspecialchars($ride['seats_offered']) ?>"
+                                                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                                            placeholder="5" required>
+                                                    </div>
+                                                </div>
+
+                                                <button type="submit"
+                                                    class="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                                                    <svg class="me-1 -ms-1 w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
+                                                        xmlns="http://www.w3.org/2000/svg">
+                                                        <path fill-rule="evenodd"
+                                                            d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
+                                                            clip-rule="evenodd"></path>
+                                                    </svg>
+                                                    Save changes
+                                                </button>
+                                            </form>
+
                                         </div>
-
-                                        <form action="/post/proxy.php" method="POST">
-                                            <input type="hidden" name="action" value="delete_ride">
-                                            <input type="hidden" name="ride_id" value="<?= $uid ?>">
-                                            <p class="mb-4">Are you sure you want to delete this ride?</p>
-                                            <button class="bg-red-600 text-white px-4 py-2 rounded">Confirm delete</button>
-                                        </form>
                                     </div>
-                                </div>
-                            </td>
-                        </tr>
-                    <?php endforeach; ?>
+                                </td>
+                                <td class="px-3 py-2 whitespace-nowrap">
+                                    <!-- Botón ELIMINAR -->
+                                    <button data-modal-target="<?= $did ?>" data-modal-toggle="<?= $did ?>"
+                                        class="rounded-lg bg-red-600 px-4 py-2 text-white">
+                                        Delete
+                                    </button>
+
+                                    <!-- Modal ELIMINAR -->
+                                    <div id="<?= $did ?>" aria-hidden="true"
+                                        class="hidden fixed inset-0 z-50 flex items-center justify-center">
+                                        <div class="bg-white dark:bg-gray-700 rounded-lg shadow p-4 w-full max-w-md">
+                                            <div class="flex items-center justify-between border-b pb-2 mb-4">
+                                                <h3 class="text-lg font-semibold">Delete ride #<?= $uid ?></h3>
+                                                <button data-modal-toggle="<?= $did ?>" class="p-2">✕</button>
+                                            </div>
+
+                                            <form action="/post/proxy.php" method="POST">
+                                                <input type="hidden" name="action" value="delete_ride">
+                                                <input type="hidden" name="ride_id" value="<?= $uid ?>">
+                                                <p class="mb-4">Are you sure you want to delete this ride?</p>
+                                                <button class="bg-red-600 text-white px-4 py-2 rounded">Confirm delete</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
                 </tbody>
             </table>
         </div>
@@ -537,7 +544,7 @@ $searchRides = getAllRides();
                 <tbody class="divide-y divide-gray-200 dark:divide-gray-700 text-center">
                     <?php if (empty($vehicles)): ?>
                         <tr class="*:text-gray-900 *:first:font-medium dark:*:text-white ">
-                            <td class="px-3 py-2 whitespace-nowrap">No hay vehículos registrados aún.</td>
+                            <td class="px-3 py-2 whitespace-nowrap">No rides have been registered yet.</td>
                         </tr>
                     <?php else: ?>
                         <?php foreach ($vehicles as $vehicle): ?>
@@ -875,6 +882,12 @@ $searchRides = getAllRides();
                             </th>
                         </tr>
                     </thead>
+                    <?php
+                    $reservedRideIds = [];
+                    foreach ($reservations as $r) {
+                        $reservedRideIds[(int) $r['ride_id']] = true;
+                    }
+                    ?>
                     <tbody class="align-middle">
                         <?php foreach ($searchRides as $ride): ?>
                             <?php
@@ -893,33 +906,42 @@ $searchRides = getAllRides();
                                 <td><?= $ride["departure_date"] ?></td>
                                 <td><?= $ride["origin"] ?></td>
                                 <td><?= $ride["destination"] ?></td>
-                                <td id="<?= $mid ?>"> <button data-modal-target="confirm-ride" data-modal-toggle="confirm-ride"
+                                <td id="<?= $mid ?>">
+                                <?php if ($user['id'] == $ride["driver_id"]): ?>
+                                    <p>Your ride</p>
+
+                                <?php elseif (!empty($reservedRideIds[(int) $ride['id']])): ?>
+                                    <p>You already booked this ride</p>
+
+                                <?php else: ?>
+                                    <button data-modal-target="confirm-ride" data-modal-toggle="confirm-ride"
                                         class="inline-flex items-center rounded-lg bg-green-600 px-5 py-2.5 text-xs font-medium uppercase leading-normal text-white shadow transition hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 active:bg-green-700">
                                         Book ride
                                     </button>
 
-                                    <div id="confirm-ride" aria-hidden="true"
-                                        class="hidden fixed inset-0 z-50 flex items-center justify-center">
-                                        <div class="bg-white dark:bg-gray-700 rounded-lg shadow p-4 w-full max-w-md">
-                                            <div class="flex items-center justify-between border-b pb-2 mb-4">
-                                                <h3 class="text-lg font-semibold">Confirm selected ride</h3>
-                                                <button data-modal-toggle="confirm-ride" class="p-2">✕</button>
-                                            </div>
-
-                                            <form action="/post/proxy.php" method="POST">
-                                                <!-- <input type="hidden" name="ride_id" value="<?= $uid ?>"> -->
-                                                <input type="hidden" value="<?= $ride['id'] ?>" name="ride_id">
-                                                <input type="hidden" value="book_ride" name="action">
-                                                <input type="hidden" name="user_id" value="<?= $user['id'] ?>">
-                                                <p class="mb-4">Are you sure you want to afiliate with this ride?</p>
-                                                <button
-                                                    class="bg-blue-700 hover:bg-blue-800 text-white px-4 py-2 rounded">Confirm
-                                                    ride</button>
-                                            </form>
-                                        </div>
-                                    </div>
+                                <?php endif; ?>
                                 </td>
                             </tr>
+
+                            <div id="confirm-ride" aria-hidden="true"
+                                class="hidden fixed inset-0 z-50 flex items-center justify-center">
+                                <div class="bg-white dark:bg-gray-700 rounded-lg shadow p-4 w-full max-w-md">
+                                    <div class="flex items-center justify-between border-b pb-2 mb-4">
+                                        <h3 class="text-lg font-semibold">Confirm selected ride</h3>
+                                        <button data-modal-toggle="confirm-ride" class="p-2">✕</button>
+                                    </div>
+
+                                    <form action="/post/proxy.php" method="POST">
+                                        <!-- <input type="hidden" name="ride_id" value="<?= $uid ?>"> -->
+                                        <input type="hidden" value="<?= $ride['id'] ?>" name="ride_id">
+                                        <input type="hidden" value="book_ride" name="action">
+                                        <input type="hidden" name="user_id" value="<?= $user['id'] ?>">
+                                        <p class="mb-4">Are you sure you want to afiliate with this ride?</p>
+                                        <button class="bg-blue-700 hover:bg-blue-800 text-white px-4 py-2 rounded">Confirm
+                                            ride</button>
+                                    </form>
+                                </div>
+                            </div>
                         <?php endforeach ?>
                     </tbody>
                 </table>

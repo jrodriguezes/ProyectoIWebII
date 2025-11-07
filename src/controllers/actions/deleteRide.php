@@ -1,6 +1,6 @@
 <?php
 require_once __DIR__ . '/../../config/session.php';
-require_once __DIR__ . '/../../models/DeleteFunctions.php';
+require_once __DIR__ . '/../../models/RideModel.php';
 
 
 $user = $_SESSION['user'] ?? null;
