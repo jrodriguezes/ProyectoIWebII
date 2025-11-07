@@ -160,7 +160,7 @@ $user = $_SESSION['user'];
 
                             <td class="w-[160px] max-w-[160px] text-center whitespace-nowrap overflow-hidden">
                                 <?php if ($reservation['status'] === 'pending' || $reservation['status'] === 'accepted'): ?>
-                                    <form method="POST" action="/post/proxyController.php" class="flex justify-center items-center">
+                                    <form method="POST" action="/post/proxy.php" class="flex justify-center items-center">
                                         <input type="hidden" name="reservation_id"
                                             value="<?= htmlspecialchars($reservation['reservation_id']) ?>">
                                         <input type="hidden" name="action" value="cancel_reservation">
