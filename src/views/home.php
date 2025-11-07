@@ -328,8 +328,14 @@ $reservations = getReservationsByPassenger($user['id']);
                                                             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                                                             Departure time
                                                         </label>
+                                                        <?php
+                                                        $datetimeValue = '';
+                                                        if (!empty($ride['departure_date'])) {
+                                                            $datetimeValue = date('Y-m-d\TH:i', strtotime($ride['departure_date']));
+                                                        }
+                                                        ?>
                                                         <input type="datetime-local" name="departure_date" id="departure_date"
-                                                            value="<?= htmlspecialchars($ride['departure_date'], 0, 5) /* HH:MM */ ?>"
+                                                            value="<?= htmlspecialchars($datetimeValue) ?>"
                                                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                                             required>
                                                     </div>
@@ -1138,153 +1144,7 @@ $reservations = getReservationsByPassenger($user['id']);
                         <td class="px-3 py-2 whitespace-nowra">
                             <div class="flex justify-center items-center space-x-2">
                                 <!-- Botón para abrir el modal -->
-                                <button data-modal-target="<?= $modalId ?>" data-modal-toggle="<?= $modalId ?>"
-                                    class="inline-flex items-center rounded-lg bg-yellow-500 px-4 py-2 text-white shadow transition hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-400"
-                                    type="button">
-                                    Modify
-                                </button>
-
-                                <div id="<?= $modalId ?>" tabindex="-1" aria-hidden="true"
-                                    class="hidden fixed top-0 right-0 left-0 z-50 w-full h-[calc(100%-1rem)] max-h-full overflow-y-auto overflow-x-hidden md:inset-0 justify-center items-center">
-                                    <div class="relative p-4 w-full max-w-2xl max-h-full">
-                                        <!-- Contenido del modal -->
-                                        <div class="relative bg-white rounded-lg shadow-sm dark:bg-gray-700">
-                                            <!-- Header -->
-                                            <div
-                                                class="flex items-center justify-between p-4 md:p-5 border-b rounded-t border-gray-200 dark:border-gray-600">
-                                                <h1 class="font-bold text-2xl leading-[1.32] text-gray-900 dark:text-white">
-                                                    Modify a Aventones Account
-                                                </h1>
-                                                <button type="button"
-                                                    class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                                                    data-modal-toggle="<?= $modalId ?>">
-                                                    <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                                                        fill="none" viewBox="0 0 14 14">
-                                                        <path stroke="currentColor" stroke-linecap="round"
-                                                            stroke-linejoin="round" stroke-width="2"
-                                                            d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
-                                                    </svg>
-                                                    <span class="sr-only">Close modal</span>
-                                                </button>
-                                            </div>
-
-                                            <!-- Body: aquí va tu formulario tal cual -->
-                                            <div class="p-4 md:p-5">
-                                                <div
-                                                    class="form-container bg-white dark:bg-gray-800 rounded-xl w-full max-w-2xl">
-                                                    <form action="/post/proxy.php" method="POST" class="max-w-xl mx-auto"
-                                                        id="registerForm" enctype="multipart/form-data">
-                                                        <input type="hidden" name="action" value="modify_user">
-                                                        <input type="hidden" name="floating_id" value="<?= $user['id'] ?>"
-                                                            class="justify-center flex py-6">
-
-                                                </div>
-
-                                                <div class="flex items-center justify-between gap-3">
-                                                    <input
-                                                        class="me-2 mt-[0.3rem] h-3.5 w-8 appearance-none rounded-[0.4375rem] bg-black/25 before:pointer-events-none before:absolute before:h-3.5 before:w-3.5 before:rounded-full before:bg-transparent before:content-[''] after:absolute after:z-[2] after:-mt-[0.1875rem] after:h-5 after:w-5 after:rounded-full after:border-none after:bg-white after:shadow-switch-2 after:transition-[background-color_0.2s,transform_0.2s] after:content-[''] checked:bg-primary checked:after:absolute checked:after:z-[2] checked:after:-mt-[3px] checked:after:ms-[1.0625rem] checked:after:h-5 checked:after:w-5 checked:after:rounded-full checked:after:border-none checked:after:bg-primary checked:after:shadow-switch-1 checked:after:transition-[background-color_0.2s,transform_0.2s] checked:after:content-[''] hover:cursor-pointer focus:outline-none focus:before:scale-100 focus:before:opacity-[0.12] focus:before:shadow-switch-3 focus:before:shadow-black/60 focus:before:transition-[box-shadow_0.2s,transform_0.2s] focus:after:absolute focus:after:z-[1] focus:after:block focus:after:h-5 focus:after:w-5 focus:after:rounded-full focus:after:content-[''] checked:focus:border-primary checked:focus:bg-primary checked:focus:before:ms-[1.0625rem] checked:focus:before:scale-100 checked:focus:before:shadow-switch-3 checked:focus:before:transition-[box-shadow_0.2s,transform_0.2s] dark:bg-white/25 dark:after:bg-surface-dark dark:checked:bg-primary dark:checked:after:bg-primary"
-                                                        type="checkbox" role="switch" id="userTypeSwitch" />
-                                                    <label id="userTypeLabel"
-                                                        class="inline-block ps-[0.15rem] hover:cursor-pointer"
-                                                        for="userTypeSwitch">Passenger</label>
-
-                                                    <input type="hidden" name="user-type" id="user-type" value="passenger">
-                                                </div>
-
-                                                <div class="grid md:grid-cols-2 md:gap-6">
-                                                    <div class="relative z-0 w-full mb-5 group">
-                                                        <input type="text" name="floating_first_name" id="floating_first_name"
-                                                            class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                                                            placeholder=" " required
-                                                            value=" <?= htmlspecialchars($user['first_name']) ?>" />
-                                                        <label for="floating_first_name"
-                                                            class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500">First
-                                                            name</label>
-                                                    </div>
-                                                    <div class="relative z-0 w-full mb-5 group">
-                                                        <input type="text" name="floating_last_name" id="floating_last_name"
-                                                            class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                                                            placeholder=" " required
-                                                            value=" <?= htmlspecialchars($user['last_name']) ?>" />
-                                                        <label for="floating_last_name"
-                                                            class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500">Last
-                                                            name</label>
-                                                    </div>
-                                                </div>
-                                                <div class="grid md:grid-cols-2 md:gap-6">
-                                                    <div class="relative z-0 w-full mb-5 group">
-                                                        <input type="password" name="floating_password" id="floating_password"
-                                                            class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                                                            placeholder=" " required />
-                                                        <label for="floating_password"
-                                                            class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500">Password</label>
-                                                    </div>
-                                                    <div class="relative z-0 w-full mb-5 group">
-                                                        <input type="password" name="floating_repeat_password"
-                                                            id="floating_repeat_password"
-                                                            class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                                                            placeholder=" " required />
-                                                        <label for="floating_repeat_password"
-                                                            class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500">Confirm
-                                                            password</label>
-                                                    </div>
-                                                </div>
-
-                                                <div class="relative z-0 w-full mb-5 group">
-                                                    <input type="email" name="floating_email" id="floating_email"
-                                                        class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                                                        placeholder=" " required value="<?= $user['email'] ?>" readonly />
-                                                    <label for="floating_email"
-                                                        class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500">Email
-                                                        address</label>
-                                                </div>
-
-                                                <div class="grid md:grid-cols-2 md:gap-6">
-                                                    <div class="relative z-0 w-full mb-5 group">
-                                                        <input type="tel" pattern="[0-9]{4}-[0-9]{4}" name="floating_phone"
-                                                            id="floating_phone"
-                                                            class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                                                            placeholder=" " required value="<?= $user['phone_number'] ?>" />
-                                                        <label for="floating_phone"
-                                                            class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500">Phone
-                                                            number (1234-5678)</label>
-                                                    </div>
-                                                    <div class="relative z-0 w-full mb-5 group">
-                                                        <input type="date" name="date" id="date"
-                                                            class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                                                            placeholder=" " required value="<?= $user['birth_date'] ?>" />
-                                                        <label for="date"
-                                                            class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500">Birthdate</label>
-                                                    </div>
-                                                </div>
-
-                                                <div class="mb-4">
-                                                    <label
-                                                        class="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">
-                                                        Fotografía personal
-                                                    </label>
-
-                                                    <?php if (!empty($user['profile_photo'])): ?>
-                                                        <div class="mb-3">
-                                                            <img src="<?= $imgUrl ?>" alt="user photo"
-                                                                class="h-16 w-24 object-cover rounded-lg border mx-auto">
-                                                            <p class="text-xs text-center text-gray-400 mt-1">Foto actual</p>
-                                                        </div>
-                                                    <?php endif; ?>
-
-                                                    <input type="file" name="photo" accept="image/*"
-                                                        class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600">
-                                                </div>
-
-                                                <button type="submit"
-                                                    class="w-full inline-flex items-center justify-center text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                                                    Submit
-                                                </button>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                
 
                                 <?php if ($user['status'] == 'active' or $user['status'] == 'pending'): ?>
                                     <form action="/post/proxy.php" method="POST">
