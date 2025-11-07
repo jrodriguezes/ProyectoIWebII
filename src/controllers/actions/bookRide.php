@@ -1,5 +1,5 @@
 <?php 
-$id = random_int(1, 99999);
+$id = random_int(1, 9999999);
 $ride_id = $_POST['ride_id'];
 $passenger_id = $_POST['user_id'];
 $status = 'pending';

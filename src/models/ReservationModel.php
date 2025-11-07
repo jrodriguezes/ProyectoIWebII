@@ -1,6 +1,8 @@
 <?php
 
 require_once __DIR__ . '/../config/db.php';
+require_once __DIR__ . '/../../vendor/autoload.php';
+
 
 
 function acceptResevations($reservation_id)
@@ -136,4 +138,59 @@ function getReservationsByPassenger($passengerId)
     $conn->close();
     return $reservations;
 }
+
+
+function getPendingReservationsOlderThan($minutes)
+{
+    $conn = getConnection();
+
+    $sql = "
+        SELECT 
+            rsv.id AS reservation_id,
+            rsv.status,
+            rsv.created_at,
+
+            rd.id AS ride_id,
+            rd.name AS ride_name,
+            rd.origin,
+            rd.destination,
+            rd.driver_id,
+
+            -- datos del chofer
+            CONCAT(d.first_name, ' ', d.last_name) AS driver_name,
+            d.email AS driver_email,
+            d.id AS driver_user_id,
+
+            -- datos del pasajero
+            rsv.passenger_id,
+            CONCAT(p.first_name, ' ', p.last_name) AS passenger_name,
+            p.email AS passenger_email
+
+        FROM reservations rsv
+        JOIN rides rd ON rsv.ride_id = rd.id
+        JOIN users d ON rd.driver_id = d.id        -- chofer
+        JOIN users p ON rsv.passenger_id = p.id    -- pasajero
+
+        WHERE rsv.status = 'pending'
+          AND rsv.created_at <= (NOW() - INTERVAL ? MINUTE)
+        ORDER BY rsv.created_at ASC
+    ";
+
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param('i', $minutes);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    $reservations = [];
+    while ($row = $result->fetch_assoc()) {
+        $reservations[] = $row;
+    }
+
+    $stmt->close();
+    $conn->close();
+
+    return $reservations;
+}
+
+
 ?>
