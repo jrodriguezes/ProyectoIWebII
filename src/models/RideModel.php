@@ -83,6 +83,7 @@ function getAllRides()
     $sql = "
         SELECT
             r.id,
+            r.driver_id,
             r.name               AS ride_name,
             r.origin,
             r.destination,
