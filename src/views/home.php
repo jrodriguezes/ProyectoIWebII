@@ -198,7 +198,7 @@ $reservations = getReservationsByPassenger($user['id']);
                 <tbody class="divide-y divide-gray-200 dark:divide-gray-700 text-center">
                     <?php if (empty($rides)): ?>
                         <tr class="*:text-gray-900 *:first:font-medium dark:*:text-white ">
-                            <td class="px-3 py-2 whitespace-nowrap">No vehicles have been registered yet.</td>
+                            <td class="px-3 py-2 whitespace-nowrap">No rides have been registered yet.</td>
                         </tr>
                     <?php else: ?>
                         <?php foreach ($rides as $ride): ?>
@@ -542,7 +542,7 @@ $reservations = getReservationsByPassenger($user['id']);
                 <tbody class="divide-y divide-gray-200 dark:divide-gray-700 text-center">
                     <?php if (empty($vehicles)): ?>
                         <tr class="*:text-gray-900 *:first:font-medium dark:*:text-white ">
-                            <td class="px-3 py-2 whitespace-nowrap">No rides have been registered yet.</td>
+                            <td class="px-3 py-2 whitespace-nowrap">No vehicles have been registered yet.</td>
                         </tr>
                     <?php else: ?>
                         <?php foreach ($vehicles as $vehicle): ?>

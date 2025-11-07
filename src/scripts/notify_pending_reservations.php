@@ -23,10 +23,10 @@ foreach ($result as $reservation) {
     // Convertir la diferencia a minutos totales
     $minutesPassed = ($interval->days * 24 * 60) + ($interval->h * 60) + $interval->i;
 
-    echo 'El dirver : ' . $reservation['driver_name'] . ' Email : ' . $reservation['driver_email'] .
+    echo 'El driver : ' . $reservation['driver_name'] . ' Email : ' . $reservation['driver_email'] .
         ' (ID : ' . $reservation['driver_id'] . ' ) ' . PHP_EOL.'(ID ride '. $reservation['reservation_id'] . ')'
         . ' En el ride de nombre ' . $reservation['ride_name'] 
-        . ' Con una diferencia ' . $minutesPassed . ' desde la creacion hasta este momento' . PHP_EOL;
+        . ' Con una diferencia ' . $minutesPassed . ' en minutos desde la creacion hasta este momento' . PHP_EOL;
 
     try {
         sendReservationNotificationEmail(

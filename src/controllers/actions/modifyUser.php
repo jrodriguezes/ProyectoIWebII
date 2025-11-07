@@ -9,7 +9,7 @@ $phone_number = $_POST["floating_phone"];
 $profile_photo = $_FILES["photo"];
 $password_raw = $_POST["floating_password"];
 $password_raw_2 = $_POST["floating_repeat_password"];
-$user_type = $_POST["user-type"];
+$user_type = $_POST["user_type"];
 
 if (!$first_name || !$last_name || !$birth_date || !$phone_number || !$user_type || !$password_raw || !$password_raw_2) {
     exit('Missing required fields');
