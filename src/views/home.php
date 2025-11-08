@@ -885,7 +885,7 @@ $reservations = getReservationsByPassenger($user['id']);
                                     </svg>
                                 </span>
                             </th>
-                                                        <th>
+                            <th>
                                 <span class="flex items-center">
                                     Actions
                                     <svg class="w-4 h-4 ms-1" aria-hidden="" xmlns="http://www.w3.org/2000/svg" width="24"
@@ -921,13 +921,15 @@ $reservations = getReservationsByPassenger($user['id']);
                                 <td><?= htmlspecialchars($ride["origin"]) ?></td>
                                 <td><?= htmlspecialchars($ride["destination"]) ?></td>
 
-                                <td id="<?= $mid ?>">
+                                <td>
                                     <?php if ($user['id'] == $ride["driver_id"]): ?>
                                         <p>Your ride</p>
                                     <?php elseif (!empty($reservedRideIds[(int) $ride['id']])): ?>
                                         <p>You already booked this ride</p>
+                                    <?php elseif ($ride['seats_offered'] == '0'): ?>
+                                        <p>There's not more available seats</p>
                                     <?php else: ?>
-                                        <button data-modal-target="confirm-ride" data-modal-toggle="confirm-ride"
+                                        <button data-modal-target="<?= $modalId ?>" data-modal-toggle="<?= $modalId ?>"
                                             class="inline-flex items-center rounded-lg bg-green-600 px-5 py-2.5 text-xs font-medium uppercase leading-normal text-white shadow transition hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 active:bg-green-700">
                                             Book ride
                                         </button>
@@ -935,12 +937,12 @@ $reservations = getReservationsByPassenger($user['id']);
                                 </td>
                             </tr>
 
-                            <div id="confirm-ride" aria-hidden="true"
+                            <div id="<?= $modalId ?>" aria-hidden="true"
                                 class="hidden fixed inset-0 z-50 flex items-center justify-center">
                                 <div class="bg-white dark:bg-gray-700 rounded-lg shadow p-4 w-full max-w-md">
                                     <div class="flex items-center justify-between border-b pb-2 mb-4">
                                         <h3 class="text-lg font-semibold">Confirm selected ride</h3>
-                                        <button data-modal-toggle="confirm-ride" class="p-2">✕</button>
+                                        <button data-modal-toggle="<?= $modalId ?>" class="p-2">✕</button>
                                     </div>
 
                                     <form action="/post/proxy.php" method="POST">
