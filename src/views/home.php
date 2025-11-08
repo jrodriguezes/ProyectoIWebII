@@ -29,13 +29,17 @@ $reservations = getReservationsByPassenger($user['id']);
     <?php if ($user['user_type'] == 'driver' or $user['user_type'] == 'driver&passenger'): ?>
         <div class="max-h-[46rem] overflow-x-auto p-8">
             <div class="flex items-center">
-                <h2 class="">Your rides</h2>
+                <div class="p-8 pl-0 pt-0 pb-0">
+                    <h2 class="text-xl font-semibold">Your rides</h2>
+                </div>
                 <!-- Modal toggle -->
-                <button data-modal-target="ride-modal" data-modal-toggle="ride-modal"
-                    class="inline-flex items-center rounded-lg bg-green-600 px-5 py-2.5 text-xs font-medium uppercase leading-normal text-white shadow transition hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 active:bg-green-700"
-                    type="button">
-                    Create ride
-                </button>
+                <div class="">
+                    <button data-modal-target="ride-modal" data-modal-toggle="ride-modal"
+                        class="inline-flex items-center rounded-lg bg-green-600 px-5 py-2.5 text-xs font-medium uppercase leading-normal text-white shadow transition hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 active:bg-green-700"
+                        type="button">
+                        Create ride
+                    </button>
+                </div>
             </div>
             <!-- Main modal -->
             <div id="ride-modal" tabindex="-1" aria-hidden="true"
@@ -411,13 +415,17 @@ $reservations = getReservationsByPassenger($user['id']);
 
         <div class="max-h-[46rem] overflow-x-auto p-8">
             <div class="flex items-center">
-                <h2 class="">Your vehicles</h2>
-                <!-- Modal toggle -->
-                <button data-modal-target="vehicle-modal" data-modal-toggle="vehicle-modal"
-                    class="inline-flex items-center rounded-lg bg-green-600 px-5 py-2.5 text-xs font-medium uppercase leading-normal text-white shadow transition hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 active:bg-green-700"
-                    type="button">
-                    Add new vehicle
-                </button>
+                <div class="p-8 pl-0 pb-0 pt-0">
+                    <h2 class="text-lg font-semibold">Your vehicles</h2>
+                </div>
+                <div>
+                    <!-- Modal toggle -->
+                    <button data-modal-target="vehicle-modal" data-modal-toggle="vehicle-modal"
+                        class="inline-flex items-center rounded-lg bg-green-600 px-5 py-2.5 text-xs font-medium uppercase leading-normal text-white shadow transition hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 active:bg-green-700"
+                        type="button">
+                        Add new vehicle
+                    </button>
+                </div>
                 <!-- Main modal -->
                 <div id="vehicle-modal" tabindex="-1" aria-hidden="true"
                     class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
@@ -769,11 +777,10 @@ $reservations = getReservationsByPassenger($user['id']);
 
     <?php if ($user['user_type'] === 'passenger' or $user['user_type'] === 'driver&passenger'): ?>
         <div class="max-h-[46rem] overflow-x-auto p-8">
-            <div class="flex items-center mb-4">
-                <h2 class="text-base font-semibold text-gray-900 dark:text-gray-100">Search rides</h2>
+            <div class="flex items-center">
+                <h2 class="text-base font-semibold text-gray-900 dark:text-gray-100 text-xl">Search rides</h2>
             </div>
 
-            <!-- Wrapper recomendado por Flowbite -->
             <div class="relative overflow-auto shadow-md sm:rounded-lg tw-dt-fix">
                 <table id="filter-table">
                     <thead>
@@ -878,6 +885,16 @@ $reservations = getReservationsByPassenger($user['id']);
                                     </svg>
                                 </span>
                             </th>
+                                                        <th>
+                                <span class="flex items-center">
+                                    Actions
+                                    <svg class="w-4 h-4 ms-1" aria-hidden="" xmlns="http://www.w3.org/2000/svg" width="24"
+                                        height="24" fill="none" viewBox="0 0 24 24">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                            stroke-width="2" d="m8 15 4 4 4-4m0-6-4-4-4 4" />
+                                    </svg>
+                                </span>
+                            </th>
                         </tr>
                     </thead>
                     <?php
@@ -899,9 +916,11 @@ $reservations = getReservationsByPassenger($user['id']);
                                 <td><?= $ride["brand"] ?></td>
                                 <td><?= $ride["seats_offered"] ?></td>
                                 <td><?= $ride["price_per_seat"] ?></td>
-                                <td><?= $ride["departure_date"] ?></td>
-                                <td><?= $ride["origin"] ?></td>
-                                <td><?= $ride["destination"] ?></td>
+                                <td><?= htmlspecialchars(date('Y-m-d', strtotime($ride['departure_date']))) ?></td>
+                                <td><?= htmlspecialchars(date('H:i', strtotime($ride['departure_date']))) ?></td>
+                                <td><?= htmlspecialchars($ride["origin"]) ?></td>
+                                <td><?= htmlspecialchars($ride["destination"]) ?></td>
+
                                 <td id="<?= $mid ?>">
                                     <?php if ($user['id'] == $ride["driver_id"]): ?>
                                         <p>Your ride</p>
@@ -944,15 +963,16 @@ $reservations = getReservationsByPassenger($user['id']);
     <?php elseif ($user['user_type'] == 'admin'): ?>
         <div class="max-h-[46rem] overflow-x-auto p-8">
             <div class="flex items-center">
-                <h2 class="">Users</h2>
-                <!-- Modal toggle -->
-                <!-- Botón para abrir el modal -->
-                <button data-modal-target="user-modal" data-modal-toggle="user-modal"
-                    class="inline-flex items-center rounded-lg bg-yellow-500 px-4 py-2 text-white shadow transition hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-400"
-                    type="button">
-                    Create User
-                </button>
-
+                <div class="p-8 pl-0 pt-0 pb-0">
+                    <h2 class="text-xl font-semibold">Users</h2>
+                </div>
+                <div class="">
+                    <button data-modal-target="user-modal" data-modal-toggle="user-modal"
+                        class="inline-flex items-center rounded-lg bg-yellow-500 px-4 py-2 text-white shadow transition hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-400"
+                        type="button">
+                        Create User
+                    </button>
+                </div>
                 <!-- Modal -->
                 <div id="user-modal" tabindex="-1" aria-hidden="true"
                     class="hidden fixed top-0 right-0 left-0 z-50 w-full h-[calc(100%-1rem)] max-h-full overflow-y-auto overflow-x-hidden md:inset-0 justify-center items-center">
@@ -979,7 +999,7 @@ $reservations = getReservationsByPassenger($user['id']);
 
                             <!-- Body: aquí va tu formulario tal cual -->
                             <div class="p-4 md:p-5">
-                                <div class="form-container bg-white dark:bg-gray-800 rounded-xl w-full max-w-2xl">
+                                <div class="form-container bg-white dark:bg-gray-700 rounded-xl w-full max-w-2xl">
                                     <form action="/post/proxy.php" method="POST" class="max-w-xl mx-auto" id="registerForm"
                                         enctype="multipart/form-data">
                                         <input type="hidden" name="action" value="register_user">
@@ -1144,8 +1164,6 @@ $reservations = getReservationsByPassenger($user['id']);
                         <td class="px-3 py-2 whitespace-nowra">
                             <div class="flex justify-center items-center space-x-2">
                                 <!-- Botón para abrir el modal -->
-                                
-
                                 <?php if ($user['status'] == 'active' or $user['status'] == 'pending'): ?>
                                     <form action="/post/proxy.php" method="POST">
                                         <input type="hidden" name="action" value="delete_user">
