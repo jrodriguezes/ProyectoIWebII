@@ -11,6 +11,7 @@ $vehicles = getVehicles($user['id']);
 $rides = getRidesByDriver($user['id']);
 $searchRides = getAllRides();
 $reservations = getReservationsByPassenger($user['id']);
+
 ?>
 
 <div class="min-h-full w-full ">
@@ -205,6 +206,7 @@ $reservations = getReservationsByPassenger($user['id']);
                             <td class="px-3 py-2 whitespace-nowrap">No rides have been registered yet.</td>
                         </tr>
                     <?php else: ?>
+                        <?php $reservatios_driver = getReservationsByDriver($user['id']); ?>
                         <?php foreach ($rides as $ride): ?>
                             <?php
                             $uid = htmlspecialchars($ride['id']);//identificador único por fila
@@ -384,27 +386,30 @@ $reservations = getReservationsByPassenger($user['id']);
                                 </td>
                                 <td class="px-3 py-2 whitespace-nowrap">
                                     <!-- Botón ELIMINAR -->
-                                    <button data-modal-target="<?= $did ?>" data-modal-toggle="<?= $did ?>"
-                                        class="rounded-lg bg-red-600 px-4 py-2 text-white">
-                                        Delete
-                                    </button>
-                                    <!-- Modal ELIMINAR -->
-                                    <div id="<?= $did ?>" aria-hidden="true"
-                                        class="hidden fixed inset-0 z-50 flex items-center justify-center">
-                                        <div class="bg-white dark:bg-gray-700 rounded-lg shadow p-4 w-full max-w-md">
-                                            <div class="flex items-center justify-between border-b pb-2 mb-4">
-                                                <h3 class="text-lg font-semibold">Delete ride #<?= $uid ?></h3>
-                                                <button data-modal-toggle="<?= $did ?>" class="p-2">✕</button>
-                                            </div>
+                                     
+                                    <?php if (!in_array($ride['id'], array_column($reservatios_driver, 'ride_id'))): ?>
+                                        <button data-modal-target="<?= $did ?>" data-modal-toggle="<?= $did ?>"
+                                            class="rounded-lg bg-red-600 px-4 py-2 text-white">
+                                            Delete
+                                        </button>
+                                        <!-- Modal ELIMINAR -->
+                                        <div id="<?= $did ?>" aria-hidden="true"
+                                            class="hidden fixed inset-0 z-50 flex items-center justify-center">
+                                            <div class="bg-white dark:bg-gray-700 rounded-lg shadow p-4 w-full max-w-md">
+                                                <div class="flex items-center justify-between border-b pb-2 mb-4">
+                                                    <h3 class="text-lg font-semibold">Delete ride #<?= $uid ?></h3>
+                                                    <button data-modal-toggle="<?= $did ?>" class="p-2">✕</button>
+                                                </div>
 
-                                            <form action="/post/proxy.php" method="POST">
-                                                <input type="hidden" name="action" value="delete_ride">
-                                                <input type="hidden" name="ride_id" value="<?= $uid ?>">
-                                                <p class="mb-4">Are you sure you want to delete this ride?</p>
-                                                <button class="bg-red-600 text-white px-4 py-2 rounded">Confirm delete</button>
-                                            </form>
+                                                <form action="/post/proxy.php" method="POST">
+                                                    <input type="hidden" name="action" value="delete_ride">
+                                                    <input type="hidden" name="ride_id" value="<?= $uid ?>">
+                                                    <p class="mb-4">Are you sure you want to delete this ride?</p>
+                                                    <button class="bg-red-600 text-white px-4 py-2 rounded">Confirm delete</button>
+                                                </form>
+                                            </div>
                                         </div>
-                                    </div>
+                                    <?php endif; ?>
                                 </td>
                             </tr>
                         <?php endforeach; ?>
@@ -553,6 +558,7 @@ $reservations = getReservationsByPassenger($user['id']);
                             <td class="px-3 py-2 whitespace-nowrap">No vehicles have been registered yet.</td>
                         </tr>
                     <?php else: ?>
+
                         <?php foreach ($vehicles as $vehicle): ?>
                             <?php
                             $uid = htmlspecialchars($vehicle['plate_id']);//identificador único por fila
@@ -585,6 +591,7 @@ $reservations = getReservationsByPassenger($user['id']);
                                         class="h-8 w-24 object-cover rounded-lg mx-auto">
                                 </td>
                                 <td class="px-3 py-2 whitespace-nowrap">
+
                                     <button data-modal-target="<?= $mid ?>" data-modal-toggle="<?= $mid ?>"
                                         class="inline-flex items-center rounded-lg bg-yellow-500 px-5 py-2.5 text-xs font-medium uppercase leading-normal text-white shadow transition hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-500 active:bg-yellow-600">
                                         Modify
@@ -710,62 +717,66 @@ $reservations = getReservationsByPassenger($user['id']);
                                             </div>
                                         </div>
                                     </div>
+
                                 </td>
                                 <td class="px-3 py-2 whitespace-nowrap">
-                                    <button data-modal-target="<?= $did ?>" data-modal-toggle="<?= $did ?>"
-                                        class="inline-flex items-center rounded-lg bg-red-600 px-5 py-2.5 text-xs font-medium uppercase leading-normal text-white shadow transition hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 active:bg-red-700">
-                                        Delete
-                                    </button>
-                                    <div id="<?= $did ?>" tabindex="-1" aria-hidden="true"
-                                        class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
-                                        <div class="relative p-4 w-full max-w-md max-h-full">
-                                            <!-- Modal content -->
-                                            <div class="relative bg-white rounded-lg shadow-sm dark:bg-gray-700">
-                                                <!-- Modal header -->
-                                                <div
-                                                    class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600 border-gray-200">
-                                                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
-                                                        Delete vehicle
-                                                    </h3>
-                                                    <button type="button"
-                                                        class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                                                        data-modal-toggle="<?= $did ?>">
-                                                        <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                                                            fill="none" viewBox="0 0 14 14">
-                                                            <path stroke="currentColor" stroke-linecap="round"
-                                                                stroke-linejoin="round" stroke-width="2"
-                                                                d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
-                                                        </svg>
-                                                        <span class="sr-only">Close modal</span>
-                                                    </button>
-                                                </div>
-                                                <!-- Modal body -->
-                                                <form class="p-4 md:p-5" action="/post/proxy.php" method="POST">
-                                                    <input type="hidden" name="action" value="delete_vehicle">
-                                                    <div class="grid gap-4 mb-4 grid-cols-2 text-center">
-                                                        <div class="col-span-2">
-                                                            <p class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                                                                Are
-                                                                you sure you want to delete this vehicle?
-                                                            </p>
-                                                            <input type="hidden" name="plate_id" id="plate_id"
-                                                                value="<?= $vehicle["plate_id"] ?>">
-                                                        </div>
+
+                                    <?php if (!in_array($vehicle['plate_id'], array_column($rides, 'vehicle_plate'))): ?>
+                                        <button data-modal-target="<?= $did ?>" data-modal-toggle="<?= $did ?>"
+                                            class="inline-flex items-center rounded-lg bg-red-600 px-5 py-2.5 text-xs font-medium uppercase leading-normal text-white shadow transition hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 active:bg-red-700">
+                                            Delete
+                                        </button>
+                                        <div id="<?= $did ?>" tabindex="-1" aria-hidden="true"
+                                            class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+                                            <div class="relative p-4 w-full max-w-md max-h-full">
+                                                <!-- Modal content -->
+                                                <div class="relative bg-white rounded-lg shadow-sm dark:bg-gray-700">
+                                                    <!-- Modal header -->
+                                                    <div
+                                                        class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600 border-gray-200">
+                                                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+                                                            Delete vehicle
+                                                        </h3>
+                                                        <button type="button"
+                                                            class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                                                            data-modal-toggle="<?= $did ?>">
+                                                            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                                                fill="none" viewBox="0 0 14 14">
+                                                                <path stroke="currentColor" stroke-linecap="round"
+                                                                    stroke-linejoin="round" stroke-width="2"
+                                                                    d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                                                            </svg>
+                                                            <span class="sr-only">Close modal</span>
+                                                        </button>
                                                     </div>
-                                                    <button type="submit"
-                                                        class="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                                                        <svg class="me-1 -ms-1 w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
-                                                            xmlns="http://www.w3.org/2000/svg">
-                                                            <path fill-rule="evenodd"
-                                                                d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
-                                                                clip-rule="evenodd"></path>
-                                                        </svg>
-                                                        Confirm delete
-                                                    </button>
-                                                </form>
+                                                    <!-- Modal body -->
+                                                    <form class="p-4 md:p-5" action="/post/proxy.php" method="POST">
+                                                        <input type="hidden" name="action" value="delete_vehicle">
+                                                        <div class="grid gap-4 mb-4 grid-cols-2 text-center">
+                                                            <div class="col-span-2">
+                                                                <p class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                                    Are
+                                                                    you sure you want to delete this vehicle?
+                                                                </p>
+                                                                <input type="hidden" name="plate_id" id="plate_id"
+                                                                    value="<?= $vehicle["plate_id"] ?>">
+                                                            </div>
+                                                        </div>
+                                                        <button type="submit"
+                                                            class="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                                                            <svg class="me-1 -ms-1 w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
+                                                                xmlns="http://www.w3.org/2000/svg">
+                                                                <path fill-rule="evenodd"
+                                                                    d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
+                                                                    clip-rule="evenodd"></path>
+                                                            </svg>
+                                                            Confirm delete
+                                                        </button>
+                                                    </form>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    <?php endif; ?>
                                 </td>
                             </tr>
                         <?php endforeach; ?>
