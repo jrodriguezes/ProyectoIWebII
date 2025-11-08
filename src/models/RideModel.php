@@ -149,5 +149,19 @@ function bookRide($id, $ride_id, $passenger_id, $status)
     }
 }
 
+function updateSeat($id)
+{
+    $conn = getConnection();
 
+    $sql = "Update rides set seats_offered = seats_offered -1 where id = '$id'";
+
+    if ($conn->query($sql) === TRUE) {
+        $conn->close();
+        return true;
+    } else {
+        $error = 'Error: ' . $conn->error;
+        $conn->close();
+        return $error;
+    }
+}
 ?>
