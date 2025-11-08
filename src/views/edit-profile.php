@@ -23,8 +23,14 @@ $phone_number = $user['phone_number'];
                         class="w-32 h-32 rounded-full object-cover border border-gray-300 dark:border-gray-600 shadow">
                 </div>
                 <div class="flex items-center justify-center">
+                    
                     <div><?php include COMP_PATH . '/theme-toggle.php'; ?></div>
-                    <div class="h-8"><?php include COMP_PATH . '/toggle.php'; ?></div>
+                    <?php if ($user['user_type'] !== 'driver&passenger' and $user['user_type'] !== 'admin'): ?>
+                        <div class="h-8"><?php include COMP_PATH . '/toggle.php'; ?></div>
+                    <?php elseif ($user['user_type'] !== 'driver' and $user['user_type'] !== 'passenger'): ?>
+                       
+                        <input type="hidden" name="user_type" value="<?= $user['user_type']?>">
+                    <?php endif; ?>
                 </div>
             </div>
             <div class="grid md:grid-cols-2 md:gap-6">
