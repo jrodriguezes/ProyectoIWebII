@@ -160,9 +160,10 @@ $user = $_SESSION['user'];
                                     From: <?= htmlspecialchars($reservation['origin']) ?>
                                     To: <?= htmlspecialchars($reservation['destination']) ?>
                                 </td>
-                                <td><?= htmlspecialchars($reservation['passenger_id']) ?></td>
-                                <td><?= htmlspecialchars($reservation['passenger_first_name'] . ' ' . $reservation['passenger_last_name']) ?>
-                                </td>
+                                
+                                <td><?= htmlspecialchars($reservation['passenger_first_name'] . ' ' . $reservation['passenger_last_name']) ?></td>
+                                <td> <?= htmlspecialchars($reservation['vehicle_plate'])?></td>
+                                
                                 <td><?= htmlspecialchars($reservation['status']) ?></td>
                                 <td><?= htmlspecialchars($reservation['created_at']) ?></td>
 
@@ -340,8 +341,8 @@ $user = $_SESSION['user'];
                                     From: <?= htmlspecialchars($reservation['origin']) ?>
                                     To: <?= htmlspecialchars($reservation['destination']) ?>
                                 </td>
-                                <td><?= htmlspecialchars($reservation['passenger_id']) ?></td>
-                                <td><?= htmlspecialchars($reservation['passenger_first_name'] . ' ' . $reservation['passenger_last_name']) ?>
+                                <td><?= htmlspecialchars($reservation['passenger_first_name'] . ' ' . $reservation['passenger_last_name']) ?></td>
+                                <td> <?= htmlspecialchars($reservation['vehicle_plate'])?></td>
                                 </td>
                                 <td><?= htmlspecialchars($reservation['status']) ?></td>
                                 <td><?= htmlspecialchars($reservation['created_at']) ?></td>
