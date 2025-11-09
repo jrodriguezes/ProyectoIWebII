@@ -23,8 +23,8 @@ $reservations = getReservationsByPassenger($user['id']);
             <?php include COMP_PATH . '/theme-toggle.php'; ?>
         </div>
         <div>
-            <h1 class="text-2xl font-bold">Bienvenido, <?= htmlspecialchars($user['first_name']) ?> 👋</h1>
-            <p class="text-gray-500">Tu rol actual es: <strong><?= htmlspecialchars($user['user_type']) ?></strong></p>
+            <h1 class="text-2xl font-bold">Welcome back, <?= htmlspecialchars($user['first_name']) ?> 👋</h1>
+            <p class="text-gray-500">Your current role is: <strong><?= htmlspecialchars($user['user_type']) ?></strong></p>
         </div>
     </div>
     <?php if ($user['user_type'] == 'driver' or $user['user_type'] == 'driver&passenger'): ?>

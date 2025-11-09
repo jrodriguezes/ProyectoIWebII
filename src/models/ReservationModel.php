@@ -3,8 +3,6 @@
 require_once __DIR__ . '/../config/db.php';
 require_once __DIR__ . '/../../vendor/autoload.php';
 
-
-
 function acceptResevations($reservation_id)
 {
 
@@ -192,5 +190,19 @@ function getPendingReservationsOlderThan($minutes)
     return $reservations;
 }
 
+function updateSeatAfterCancelBooking($id)
+{
+    $conn = getConnection();
 
+    $sql = "Update rides set seats_offered = seats_offered +1 where id = '$id'";
+
+    if ($conn->query($sql) === TRUE) {
+        $conn->close();
+        return true;
+    } else {
+        $error = 'Error: ' . $conn->error;
+        $conn->close();
+        return $error;
+    }
+}
 ?>

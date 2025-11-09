@@ -1,4 +1,3 @@
-
 <button id="theme-toggle" type="button"
   class="inline-flex items-center rounded-lg p-2.5 text-gray-600 hover:bg-gray-100
          focus:outline-none focus:ring-4 focus:ring-gray-200

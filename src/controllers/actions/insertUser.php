@@ -49,7 +49,8 @@ if ($result !== true) {
 }
 
 // 4) URL y envío de email (servicio)
-$verifyUrl = "http://proyecto01webii.net:8080/verify-email?uid={$id}&token={$token}";
+$verifyUrl = "http://www.proyecto01webii.net:8080/verify-email?uid={$id}&token={$token}";
+     
 try {
     sendVerificationEmail($email, "$first_name $last_name", verifyUrl: $verifyUrl);
 } catch (Throwable $e) {

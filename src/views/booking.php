@@ -16,8 +16,8 @@ $user = $_SESSION['user'];
             <div><?php include COMP_PATH . '/theme-toggle.php'; ?></div>
         </div>
         <div>
-            <h1 class="text-2xl font-bold">Bienvenido, <?= htmlspecialchars($user['first_name']) ?> 👋</h1>
-            <p class="text-gray-500">Tu rol actual es: <strong><?= htmlspecialchars($user['user_type']) ?></strong>
+            <h1 class="text-2xl font-bold">Welcome back, <?= htmlspecialchars($user['first_name']) ?> 👋</h1>
+            <p class="text-gray-500">Your current role is: <strong><?= htmlspecialchars($user['user_type']) ?></strong>
             </p>
         </div>
     </div>
@@ -41,7 +41,6 @@ $user = $_SESSION['user'];
                                 <th class="text-center">Actions</th>
                             </tr>
                         </thead>
-
                         <tbody class="divide-y divide-gray-200 dark:divide-gray-700 text-center">
                             <?php if (empty($reservations)): ?>
                                 <tr>
@@ -88,6 +87,7 @@ $user = $_SESSION['user'];
                                                         <input type="hidden" name="reservation_id"
                                                             value="<?= htmlspecialchars($reservation['reservation_id']) ?>">
                                                         <input type="hidden" name="action" value="reject_reservation">
+                                                        <input type="hidden" name="ride_id" value="<?= $reservation['ride_id'] ?>">
                                                         <button type="submit"
                                                             class="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-md text-sm px-3 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                                                             <svg class="me-1 w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
@@ -104,6 +104,7 @@ $user = $_SESSION['user'];
                                                         <input type="hidden" name="reservation_id"
                                                             value="<?= htmlspecialchars($reservation['reservation_id']) ?>">
                                                         <input type="hidden" name="action" value="cancel_reservation">
+                                                        <input type="hidden" name="ride_id" value="<?= $reservation['ride_id'] ?>">
                                                         <button type="submit"
                                                             class="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-md text-sm px-3 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                                                             <svg class="me-1 w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
@@ -125,15 +126,11 @@ $user = $_SESSION['user'];
                         </tbody>
                     </table>
                 </div>
-
             </div>
         </div>
     <?php elseif ($user['user_type'] === 'passenger'): ?>
         <?php $reservations = getReservationsByPassenger($user['id']); ?>
-
-
         <div class="w-full overflow-x-auto pr-0 -mr-4 sm:-mr-6 md:-mr-8 lg:-mr-10">
-
             <table class="w-full table-fixed border-collapse divide-y-2 divide-gray-200 dark:divide-gray-700 text-center">
                 <thead class="sticky top-0 bg-white dark:bg-gray-900">
                     <tr class="font-medium text-gray-900 dark:text-white">
@@ -178,6 +175,7 @@ $user = $_SESSION['user'];
                                                 <input type="hidden" name="reservation_id"
                                                     value="<?= htmlspecialchars($reservation['reservation_id']) ?>">
                                                 <input type="hidden" name="action" value="cancel_reservation">
+                                                <input type="hidden" name="ride_id" value="<?= $reservation['ride_id'] ?>">
                                                 <button type="submit"
                                                     class="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-md text-sm px-3 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                                                     <svg class="me-1 w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
@@ -203,7 +201,7 @@ $user = $_SESSION['user'];
         <?php $reservations = getReservationsByDriver($user['id']); ?>
         <div class="w-full overflow-x-auto pr-0 -mr-4 sm:-mr-6 md:-mr-8 lg:-mr-10">
             <div class="ml-8">
-                <h2>Rides como Driver</h2>
+                <h2>Rides as driver</h2>
             </div>
             <div class="p-8">
                 <div class="overflow-x-auto w-full">
@@ -267,6 +265,7 @@ $user = $_SESSION['user'];
                                                         <input type="hidden" name="reservation_id"
                                                             value="<?= htmlspecialchars($reservation['reservation_id']) ?>">
                                                         <input type="hidden" name="action" value="reject_reservation">
+                                                        <input type="hidden" name="ride_id" value="<?= $reservation['ride_id'] ?>">
                                                         <button type="submit"
                                                             class="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-md text-sm px-3 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                                                             <svg class="me-1 w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
@@ -283,6 +282,7 @@ $user = $_SESSION['user'];
                                                         <input type="hidden" name="reservation_id"
                                                             value="<?= htmlspecialchars($reservation['reservation_id']) ?>">
                                                         <input type="hidden" name="action" value="cancel_reservation">
+                                                        <input type="hidden" name="ride_id" value="<?= $reservation['ride_id'] ?>">
                                                         <button type="submit"
                                                             class="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-md text-sm px-3 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                                                             <svg class="me-1 w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
@@ -304,18 +304,13 @@ $user = $_SESSION['user'];
                         </tbody>
                     </table>
                 </div>
-
             </div>
         </div>
-
         <?php $reservations = getReservationsByPassenger($user['id']); ?>
-
-
         <div class="w-full overflow-x-auto pr-0 -mr-4 sm:-mr-6 md:-mr-8 lg:-mr-10">
             <div class="ml-8">
-                <h2>Rides como Passenger</h2>
+                <h2>Rides as passenger</h2>
             </div>
-
             <table class="w-full table-fixed border-collapse divide-y-2 divide-gray-200 dark:divide-gray-700 text-center">
                 <thead class="sticky top-0 bg-white dark:bg-gray-900">
                     <tr class="font-medium text-gray-900 dark:text-white">
@@ -359,6 +354,7 @@ $user = $_SESSION['user'];
                                             <form method="POST" action="/post/proxy.php">
                                                 <input type="hidden" name="reservation_id"
                                                     value="<?= htmlspecialchars($reservation['reservation_id']) ?>">
+                                                <input type="hidden" name="ride_id" value="<?= $reservation['ride_id'] ?>">
                                                 <input type="hidden" name="action" value="cancel_reservation">
                                                 <button type="submit"
                                                     class="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-md text-sm px-3 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
