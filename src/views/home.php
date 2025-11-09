@@ -11,7 +11,6 @@ $vehicles = getVehicles($user['id']);
 $rides = getRidesByDriver($user['id']);
 $searchRides = getAllRides();
 $reservations = getReservationsByPassenger($user['id']);
-
 ?>
 
 <div class="min-h-full w-full ">
@@ -24,7 +23,8 @@ $reservations = getReservationsByPassenger($user['id']);
         </div>
         <div>
             <h1 class="text-2xl font-bold">Welcome back, <?= htmlspecialchars($user['first_name']) ?> 👋</h1>
-            <p class="text-gray-500">Your current role is: <strong><?= htmlspecialchars($user['user_type']) ?></strong></p>
+            <p class="text-gray-500">Your current role is: <strong><?= htmlspecialchars($user['user_type']) ?></strong>
+            </p>
         </div>
     </div>
     <?php if ($user['user_type'] == 'driver' or $user['user_type'] == 'driver&passenger'): ?>
@@ -80,8 +80,10 @@ $reservations = getReservationsByPassenger($user['id']);
                                 <div class="col-span-2">
                                     <label for="vehicle_id"
                                         class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Vehicle</label>
-                                    <select id="vehicle" name="vehicle_id"
-                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg">
+                                    <select id="vehicle_id" name="vehicle_id" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg 
+            focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 
+            dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 
+            dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
                                         <option selected>Select your vehicle</option>
                                         <?php
                                         $vehiclesList = getVehicles($user['id']);
@@ -209,9 +211,9 @@ $reservations = getReservationsByPassenger($user['id']);
                         <?php $reservatios_driver = getReservationsByDriver($user['id']); ?>
                         <?php foreach ($rides as $ride): ?>
                             <?php
-                            $uid = htmlspecialchars($ride['id']);//identificador único por fila
-                            $mid = "ride-modify-modal-$uid";                   //id único del modal Modify
-                            $did = "ride-delete-modal-$uid";                   //id único del modal Delete
+                            $uid = htmlspecialchars($ride['id']);//identificador unico por fila
+                            $mid = "ride-modify-modal-$uid";             //id unico del modal Modify
+                            $did = "ride-delete-modal-$uid";             //id unico del modal Delete
                 
                             ?>
                             <tr class="*:text-gray-900 *:first:font-medium dark:*:text-white">
@@ -385,8 +387,7 @@ $reservations = getReservationsByPassenger($user['id']);
                                     </div>
                                 </td>
                                 <td class="px-3 py-2 whitespace-nowrap">
-                                    <!-- Botón ELIMINAR -->
-                                     
+                                    <!-- Boton ELIMINAR -->
                                     <?php if (!in_array($ride['id'], array_column($reservatios_driver, 'ride_id'))): ?>
                                         <button data-modal-target="<?= $did ?>" data-modal-toggle="<?= $did ?>"
                                             class="rounded-lg bg-red-600 px-4 py-2 text-white">
@@ -561,10 +562,10 @@ $reservations = getReservationsByPassenger($user['id']);
 
                         <?php foreach ($vehicles as $vehicle): ?>
                             <?php
-                            $uid = htmlspecialchars($vehicle['plate_id']);//identificador único por fila
-                            $mid = "vehicle-modify-modal-$uid";                   //id único del modal Modify
-                            $did = "vehicle-delete-modal-$uid";                   //id único del modal Delete
-                            $fileId = "modify-vehicle-picture-$uid";              //id único para el input file
+                            $uid = htmlspecialchars($vehicle['plate_id']);//identificador unico por fila
+                            $mid = "vehicle-modify-modal-$uid";                   //id unico del modal Modify
+                            $did = "vehicle-delete-modal-$uid";                   //id unico del modal Delete
+                            $fileId = "modify-vehicle-picture-$uid";              //id unico para el input file
                             $imgUrl = rtrim(BASE_URL ?? '', '/') . htmlspecialchars($vehicle['vehicle_picture']); // URL completa
                             ?>
                             <tr class="*:text-gray-900 *:first:font-medium dark:*:text-white">
@@ -717,7 +718,6 @@ $reservations = getReservationsByPassenger($user['id']);
                                             </div>
                                         </div>
                                     </div>
-
                                 </td>
                                 <td class="px-3 py-2 whitespace-nowrap">
 
@@ -1010,7 +1010,7 @@ $reservations = getReservationsByPassenger($user['id']);
                                 </button>
                             </div>
 
-                            <!-- Body: aquí va tu formulario tal cual -->
+                            <!-- Body -->
                             <div class="p-4 md:p-5">
                                 <div class="form-container bg-white dark:bg-gray-700 rounded-xl w-full max-w-2xl">
                                     <form action="/post/proxy.php" method="POST" class="max-w-xl mx-auto" id="registerForm"
@@ -1106,18 +1106,14 @@ $reservations = getReservationsByPassenger($user['id']);
                                             class="w-full inline-flex items-center justify-center text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                                             Submit
                                         </button>
-                                        <!--<script src="/assets/js/register-validation.js"></script>-->
                                     </form>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-
             </div>
-
         </div>
-
         <table class="min-w-full divide-y-2 divide-gray-200 dark:divide-gray-700 dt-debug">
             <thead class="sticky top-0 bg-white ltr:text-left rtl:text-right dark:bg-gray-900">
                 <tr class="*:font-medium *:text-gray-900 dark:*:text-white">
@@ -1200,7 +1196,5 @@ $reservations = getReservationsByPassenger($user['id']);
                 <?php endforeach; ?>
             </tbody>
         </table>
-
-
     <?php endif; ?>
 </div>

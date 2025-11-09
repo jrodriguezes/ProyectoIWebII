@@ -13,6 +13,8 @@ $password_raw_2 = $_POST["floating_repeat_password"];
 $user_type = $_POST["user_type"];
 $stateId = "pending";
 
+$isAdminRegistration = ($_POST["user_type"] ?? '') === 'admin';
+
 if (!$id || !$first_name || !$last_name || !$birth_date || !$email || !$phone_number || !$user_type || !$password_raw || !$password_raw_2) {
     exit('Missing required fields');
 }
@@ -50,16 +52,19 @@ if ($result !== true) {
 
 // 4) URL y envío de email (servicio)
 $verifyUrl = "http://www.proyecto01webii.net:8080/verify-email?uid={$id}&token={$token}";
-     
+
 try {
     sendVerificationEmail($email, "$first_name $last_name", verifyUrl: $verifyUrl);
 } catch (Throwable $e) {
     error_log('Mailer error: ' . $e->getMessage());
 }
 
+if ($isAdminRegistration) {
+    header("Location: /home");
+    exit();
+}
 
 header("Location: /check-your-email");
 exit();
-
 
 ?>

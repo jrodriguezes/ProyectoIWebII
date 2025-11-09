@@ -23,13 +23,13 @@ $phone_number = $user['phone_number'];
                         class="w-32 h-32 rounded-full object-cover border border-gray-300 dark:border-gray-600 shadow">
                 </div>
                 <div class="flex items-center justify-center">
-                    
+
                     <div><?php include COMP_PATH . '/theme-toggle.php'; ?></div>
                     <?php if ($user['user_type'] !== 'driver&passenger' and $user['user_type'] !== 'admin'): ?>
                         <div class="h-8"><?php include COMP_PATH . '/toggle.php'; ?></div>
                     <?php elseif ($user['user_type'] !== 'driver' and $user['user_type'] !== 'passenger'): ?>
-                       
-                        <input type="hidden" name="user_type" value="<?= $user['user_type']?>">
+
+                        <input type="hidden" name="user_type" value="<?= $user['user_type'] ?>">
                     <?php endif; ?>
                 </div>
             </div>
@@ -112,7 +112,7 @@ $phone_number = $user['phone_number'];
                     </label>
                     <input type="file" name="photo" id="photo" accept="image/*"
                         class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-                        required value="<?= $first_name ?>" />
+                        value="<?= $first_name ?>" />
 
                 </div>
             </div>

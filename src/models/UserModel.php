@@ -28,9 +28,13 @@ function updateProfile($user_id, $first_name, $last_name, $password, $phone_numb
                 password = '$password',
                 phone_number = '$phone_number',
                 birth_date = '$birth_date',
-                profile_photo = '$photo',
-                user_type = '$user_type'
-            WHERE id = '$user_id'";
+                user_type = '$user_type'";
+
+    if (!empty($photo)) {
+        $sql .= ", profile_photo = '$photo'";
+    }
+
+    $sql .= " where id = '$user_id'";
 
     if ($conn->query($sql) === TRUE) {
         return true;
@@ -41,9 +45,10 @@ function updateProfile($user_id, $first_name, $last_name, $password, $phone_numb
     $conn->close();
 }
 
-require_once __DIR__ .'/../config/db.php';
+require_once __DIR__ . '/../config/db.php';
 
-function getUsers() {
+function getUsers()
+{
     $conn = getConnection();
 
     $sql = "SELECT 
@@ -74,7 +79,8 @@ function getUsers() {
     return $users;
 }
 
-function deleteUser ($id) {
+function deleteUser($id)
+{
     $conn = getConnection();
 
     $sql = "UPDATE users 
@@ -87,10 +93,11 @@ function deleteUser ($id) {
         return 'Error: ' . $conn->error;
     }
 
-    $conn->close();            
+    $conn->close();
 }
 
-function activeUser ($id) {
+function activeUser($id)
+{
     $conn = getConnection();
 
     $sql = "UPDATE users 
@@ -103,7 +110,7 @@ function activeUser ($id) {
         return 'Error: ' . $conn->error;
     }
 
-    $conn->close();            
+    $conn->close();
 }
 
 

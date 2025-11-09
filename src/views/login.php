@@ -3,6 +3,26 @@
     <div class="flex items-center">
         <div><?php include COMP_PATH . '/theme-toggle.php'; ?></div>
     </div>
+
+    <!-- ALERTS -->
+    <?php if (isset($_GET['error'])): ?>
+        <?php if ($_GET['error'] === 'inactive'): ?>
+            <div class="mb-4 p-4 text-sm text-yellow-800 rounded-lg bg-yellow-50 dark:bg-gray-700 dark:text-yellow-300"
+                role="alert">
+                Your account is <strong>inactive</strong>. Please contact the administrator.
+            </div>
+        <?php elseif ($_GET['error'] === 'wrongpass'): ?>
+            <div class="mb-4 p-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-700 dark:text-red-300" role="alert">
+                Incorrect password.
+            </div>
+        <?php elseif ($_GET['error'] === 'notfound'): ?>
+            <div class="mb-4 p-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-700 dark:text-red-300" role="alert">
+                User not found.
+            </div>
+        <?php endif; ?>
+    <?php endif; ?>
+    <!-- END ALERTS -->
+
     <form class="space-y-6" action="/post/login.php" method="POST">
         <h5 class="text-xl font-medium text-gray-900 dark:text-white">Sign in to Aventones</h5>
         <div>
@@ -34,7 +54,8 @@
             class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Login
             to your account</button>
         <div class="text-sm font-medium text-gray-500 dark:text-gray-300">
-            Not registered? <a href="/user-register" class="text-blue-700 hover:underline dark:text-blue-500">Create account</a>
+            Not registered? <a href="/user-register" class="text-blue-700 hover:underline dark:text-blue-500">Create
+                account</a>
         </div>
     </form>
 </div>
