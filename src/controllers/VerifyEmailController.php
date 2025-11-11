@@ -39,6 +39,6 @@ function verifyEmail(string $uid, string $token): void
                WHERE id='$uid'";
     $conn->query($update);
 
-    echo "<h2>Cuenta verificada correctamente ✅</h2>
+    echo "<h2>Cuenta verificada correctamente</h2>
           <a href='/login'>Ir al login</a>";
 }

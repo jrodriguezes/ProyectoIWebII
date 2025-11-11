@@ -6,7 +6,7 @@ if (!$action) {
   exit('Missing action');
 }
 
-// Ej.: register_user, modify_vehicle, delete_ride, modify_accept_reservation
+// Ej.: register_user, modify_vehicle, delete_ride, modify_reservation
 $parts = explode('_', $action);  // ['register','user'] o ['modify','accept','reservation']
 
 // Resto (user/vehicle/ride)

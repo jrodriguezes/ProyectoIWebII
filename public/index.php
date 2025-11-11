@@ -2,8 +2,6 @@
 require_once __DIR__ . '/../vendor/autoload.php';
 require_once __DIR__ . '/../src/config/session.php';
 
-// FRONT CONTROLLER
-// 👈 BASE_URL dinámica (http/https + host:puerto + subcarpeta)
 $scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
 define('ROOT', dirname(__DIR__));
 define('VIEW_PATH', ROOT . '/src/views');
@@ -13,7 +11,6 @@ define('BASE_URL', '/');
 
 function render(string $view, array $data = [])
 {
-
   extract($data);
   ob_start();
   include VIEW_PATH . "/{$view}.php";
