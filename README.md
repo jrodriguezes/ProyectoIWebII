@@ -144,7 +144,9 @@ Gestión de Rides:
     
 
 Búsqueda de Rides:
+    La busqueda de rides se obtiene mediante el modelo rides, alli se encuentra la consulta en function llamada getAllRides, la cual ordena los rides del mas reciente al mas viejo de forma descendiente. Esta funcion se llama en home la cual alli se utiliza para mostrar los datos encontrados en una tabla de flowbite. El sort de la tabla funciona mediante un .js la cual por defecto lo traia la tabla en la pagina oficial de flowbite https://flowbite.com/docs/plugins/datatables/#sorting-data.
 
+    
 Reservas:
     La informacion de secarga en una arrays que vienen desde los models y por medio de los de foreach en la vista con las llaves del array que muestra en la tabla
 
@@ -153,6 +155,100 @@ Reservas:
     que hace el mismo proseso proxy controler accion model
 
     Y en caso de que sea conductor va a salir las acciones accept reject cancel y el input de cada form es accept_reservation,reject_reservation, cancel_reservation que sigue el mismo paratron proxy controller accion model y estaccion se en en table de manera inmediata 
+
+Tablas de la base de datos:
+
+    CREATE TABLE users (
+        id INT PRIMARY KEY NOT NULL,            
+        first_name VARCHAR(50) NOT NULL,
+        last_name VARCHAR(50) NOT NULL,
+        birth_date DATE NOT NULL,
+        email VARCHAR(100) NOT NULL UNIQUE,
+        phone_number VARCHAR(20) NOT NULL,
+        profile_photo VARCHAR(255) DEFAULT NULL,
+        password VARCHAR(255) NOT NULL,
+        user_type VARCHAR(40) NOT NULL,
+        status ENUM('active','inactive','pending') DEFAULT 'pending',
+        email_verified_at DATETIME NULL,
+        verify_token_hash CHAR(64) NULL UNIQUE,
+        verify_token_expires_at DATETIME NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        INDEX (verify_token_hash)
+    );
+
+
+    CREATE TABLE vehicles (
+        plate_id VARCHAR(7) PRIMARY KEY,
+        driver_id CHAR(11) NOT NULL,
+        color VARCHAR(30) NOT NULL,
+        brand VARCHAR(30) NOT NULL,
+        model VARCHAR(40) NOT NULL,
+        year YEAR(4) NOT NULL,
+        seats INT(11) NOT NULL,
+        vehicle_picture VARCHAR(255),
+        status ENUM('active', 'inactive') NOT NULL DEFAULT 'active',
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
+
+    create table rides(
+        id INT PRIMARY KEY AUTO_INCREMENT,
+        driver_id INT NOT NULL,
+        vehicle_plate VARCHAR(7) NOT NULL,
+        
+        name VARCHAR(80) NOT NULL,
+        origin VARCHAR(120) NOT NULL,
+        destination VARCHAR(120) NOT NULL,
+        
+        departure_date datetime not null,
+        
+        price_per_seat DECIMAL(10,2) NOT NULL,
+        seats_offered INT NOT NULL,
+        
+        status ENUM('active','inactive','cancelled','completed') DEFAULT 'active',
+        
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+        
+        INDEX (driver_id),
+        INDEX (vehicle_plate),
+        FOREIGN KEY (driver_id) REFERENCES users(id),
+        FOREIGN KEY (vehicle_plate) REFERENCES vehicles(plate_id)
+    );
+
+    create table reservations(
+        id INT PRIMARY KEY AUTO_INCREMENT,
+        
+        ride_id INT NOT NULL,              -- a qué ride pertenece la reserva
+        passenger_id INT NOT NULL,         -- quién está reservando (usuario pasajero)
+        
+        status ENUM(
+            'pending',     -- creada por el pasajero, espera decisión del chofer
+            'accepted',    -- chofer la aceptó
+            'rejected',    -- chofer la rechazó
+            'cancelled'    -- pasajero o chofer la canceló después
+        ) NOT NULL DEFAULT 'pending',
+        
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+        
+        INDEX (ride_id),
+        INDEX (passenger_id),
+        INDEX (status),
+
+        CONSTRAINT fk_reservation_ride
+            FOREIGN KEY (ride_id) REFERENCES rides(id)
+            ON DELETE CASCADE,
+
+        CONSTRAINT fk_reservation_passenger
+            FOREIGN KEY (passenger_id) REFERENCES users(id)
+            ON DELETE CASCADE,
+
+        -- evita que el mismo pasajero mande 20 reservas pendientes al mismo ride
+        CONSTRAINT uq_ride_passenger_status_pending
+            UNIQUE (ride_id, passenger_id, status)
+
+    );
+
 
 
 tabla flowbite search rides
